@@ -11,6 +11,7 @@ from time               import sleep
 # Third-party imports #
 
 from textual.app        import App, ComposeResult
+from textual.events     import Resize
 from textual.containers import (
         Container, ScrollableContainer, Vertical,
         Horizontal, VerticalScroll,
@@ -24,6 +25,47 @@ from textual.widgets    import (
 
 # ------------- #
 # Local imports #
+
+
+
+
+
+from rich_pixels import Pixels
+from rich.console import Console
+from rich.segment import Segment
+from rich.style import Style
+
+console = Console()
+
+# Draw your shapes using any character you want
+grid = """\
+     xx   xx
+     ox   ox
+     Ox   Ox
+xx             xx
+xxxxxxxxxxxxxxxxx
+"""
+
+# Map characters to different characters/styles
+# mapping = {
+#     "x": Segment(" ", Style.parse("yellow on yellow")),
+#     "o": Segment(" ", Style.parse("on white")),
+#     "O": Segment(" ", Style.parse("on blue")),
+# }
+
+# pixels = Pixels.from_ascii(grid, mapping)
+# pixels = Pixels.from_ascii(grid)
+# console.print(pixels)
+pixels = Pixels.from_image_path("/home/arix/Downloads/logo_2.png")
+
+class ImageWidget(Widget):
+    # def __init__(self, image_path: str):
+    def __init__(self, pixels:Pixels):
+        super().__init__()
+        self.pixels = pixels
+
+    def render(self):
+        return self.pixels
 
 
 
@@ -52,26 +94,46 @@ class PageDebugContainer(Container):
                 classes="PageDebug_LoadingIndicator",
                 disabled=True,
                 )
+
         self.text_1 = Label(
-                renderable="Loading...",
+                renderable="( Resize terminal window )",
                 id="PageDebug_Text_1",
-                classes="PageDebug_Text_1",
+                classes="PageDebug_Text",
                 disabled=True,
                 )
 
         self.text_2 = Label(
                 renderable="Loading...",
                 id="PageDebug_Text_2",
-                classes="PageDebug_Text_2",
+                classes="PageDebug_Text",
+                disabled=True,
+                )
+
+        self.text_3 = Label(
+                renderable="Loading...",
+                id="PageDebug_Text_3",
+                classes="PageDebug_Text",
+                disabled=True,
+                )
+
+        self.text_4 = Label(
+                renderable="Loading...",
+                id="PageDebug_Text_4",
+                classes="PageDebug_Text",
                 disabled=True,
                 )
 
         yield self.indicator
         yield self.text_1
         yield self.text_2
+        yield self.text_3
+        yield self.text_4
+
+        # yield pixels
+        yield ImageWidget(pixels)
 
 
-    def on_resize(self):
+    def on_resize(self, event:Resize):
         """
         Called every time terminal window was resized or
         terminal font size was changed.
@@ -82,9 +144,16 @@ class PageDebugContainer(Container):
         # Access the width (columns) and height (lines)
         width = terminal_size.columns
         height = terminal_size.lines
+        self.text_2.update(f"Width: {width} / Height: {height}\nRatio: {round(width/height,2)}")
 
-        self.text_1.update(f"Width: {width} / Height: {height}")
-        self.text_2.update(f"Ratio: {round(width/height,2)}")
+        size = event.size
+        virt_size = event.virtual_size
+        cont_size = event.container_size
+        pix_size = event.pixel_size
+
+        self.text_3.update(f"Size: {size}\nVirtual size: {virt_size}")
+        self.text_4.update(
+                f"Container size: {cont_size}\nPixel size: {pix_size}")
 
 
 # class LoadingErrorPage(Container):
