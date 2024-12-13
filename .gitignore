@@ -1,0 +1,30 @@
+#   - Ignore all files of a type: *.log.
+*.log
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+venv
+venv*
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# pdm files:
+pdm.lock
+.pdm-build
+.pdm-python
+
+# pytest
+.pytest-_cache
