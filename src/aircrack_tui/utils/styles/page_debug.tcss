@@ -3,12 +3,11 @@ $color_1: $accent-lighten-2;
 $color_2: $foreground 30%;
 $color_3: $secondary;
 $error_1: crimson 100%;
-/*$background_1: $foreground 20%;*/
-$background_1: white;
 
 
-/* COMMON SCREEN - first screen (page) */
+/* DEBUG SCREEN */
 PageDebug.PageDebug {
+    border: tall $color_1;
     /*layer: page_debug;*/
     layers: page_debug_container;
     display: block;
@@ -25,14 +24,24 @@ PageDebug.PageDebug {
             display: none;
         }
 
-        .LoadingIndicator_1 {
-            padding: 1 0 0 0;
-            height: 60%;
+        .PageDebug_LoadingIndicator {
+            padding: 0 0 0 0;
+            margin: 1 0 1 0;
+            height: 1;
             color: $color_1;
+            align: center top;
         }
 
-        .eNBsLoadingText {
+        .PageDebug_Text_1 {
             width: 100%;
+            margin: 1 0 1 0;
+            color: $color_1;
+            text-align: center;
+        }
+
+        .PageDebug_Text_2 {
+            width: 100%;
+            margin: 1 0 1 0;
             color: $color_1;
             text-align: center;
         }

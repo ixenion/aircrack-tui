@@ -3,6 +3,7 @@
 
 import asyncio
 from functools          import partial
+from shutil             import get_terminal_size
 from time               import sleep
 
 
@@ -40,23 +41,50 @@ class PageDebugContainer(Container):
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
-        super().__init__(classes=classes, id=_id,)
+        super().__init__(classes=classes, id=_id)
 
 
     def compose(self) -> ComposeResult:
         """ Here default (or other custom) Widgets are combined."""
 
-        yield LoadingIndicator(
-                id="LoadingIndicator_1",
-                classes="LoadingIndicator_1",
+        self.indicator = LoadingIndicator(
+                id="PageDebug_LoadingIndicator",
+                classes="PageDebug_LoadingIndicator",
                 disabled=True,
                 )
-        yield Label(
-                "Обновление списка устройств...",
-                id="eNBsLoadingText",
-                classes="eNBsLoadingText",
+        self.text_1 = Label(
+                renderable="Loading...",
+                id="PageDebug_Text_1",
+                classes="PageDebug_Text_1",
                 disabled=True,
                 )
+
+        self.text_2 = Label(
+                renderable="Loading...",
+                id="PageDebug_Text_2",
+                classes="PageDebug_Text_2",
+                disabled=True,
+                )
+
+        yield self.indicator
+        yield self.text_1
+        yield self.text_2
+
+
+    def on_resize(self):
+        """
+        Called every time terminal window was resized or
+        terminal font size was changed.
+        """
+            
+        # Get the terminal size
+        terminal_size = get_terminal_size()
+        # Access the width (columns) and height (lines)
+        width = terminal_size.columns
+        height = terminal_size.lines
+
+        self.text_1.update(f"Width: {width} / Height: {height}")
+        self.text_2.update(f"Ratio: {round(width/height,2)}")
 
 
 # class LoadingErrorPage(Container):
@@ -360,6 +388,8 @@ class PageDebug(Widget):
 
         super().__init__(classes=classes, id=_id,)
         self.enbs_dict:dict[str,str]|None = None
+        self.border_subtitle = "bottom right"
+        self.border_title = "top left"
 
 
     def compose(self) -> ComposeResult:
