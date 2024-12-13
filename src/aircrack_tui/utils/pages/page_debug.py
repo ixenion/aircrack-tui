@@ -27,48 +27,6 @@ from textual.widgets    import (
 # Local imports #
 
 
-
-
-
-from rich_pixels import Pixels
-from rich.console import Console
-from rich.segment import Segment
-from rich.style import Style
-
-console = Console()
-
-# Draw your shapes using any character you want
-grid = """\
-     xx   xx
-     ox   ox
-     Ox   Ox
-xx             xx
-xxxxxxxxxxxxxxxxx
-"""
-
-# Map characters to different characters/styles
-# mapping = {
-#     "x": Segment(" ", Style.parse("yellow on yellow")),
-#     "o": Segment(" ", Style.parse("on white")),
-#     "O": Segment(" ", Style.parse("on blue")),
-# }
-
-# pixels = Pixels.from_ascii(grid, mapping)
-# pixels = Pixels.from_ascii(grid)
-# console.print(pixels)
-pixels = Pixels.from_image_path("/home/arix/Downloads/logo_2.png")
-
-class ImageWidget(Widget):
-    # def __init__(self, image_path: str):
-    def __init__(self, pixels:Pixels):
-        super().__init__()
-        self.pixels = pixels
-
-    def render(self):
-        return self.pixels
-
-
-
 ###########
 # CLASSES #
 ###########
@@ -128,9 +86,6 @@ class PageDebugContainer(Container):
         yield self.text_2
         yield self.text_3
         yield self.text_4
-
-        # yield pixels
-        yield ImageWidget(pixels)
 
 
     def on_resize(self, event:Resize):
