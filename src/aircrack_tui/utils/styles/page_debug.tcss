@@ -1,0 +1,44 @@
+/* CONSTANTS */
+$color_1: $accent-lighten-2;
+$color_2: $foreground 30%;
+$color_3: $secondary;
+$error_1: crimson 100%;
+/*$background_1: $foreground 20%;*/
+$background_1: white;
+
+
+/* COMMON SCREEN - first screen (page) */
+PageDebug.PageDebug {
+    /*layer: page_debug;*/
+    layers: page_debug_container;
+    display: block;
+    &.-hidden {
+        display: none;
+    }
+
+
+    /* PAGE DEBUG CONTAINER */
+    .PageDebugContainer {
+        layer: loading;
+
+        &.-hidden {
+            display: none;
+        }
+
+        .LoadingIndicator_1 {
+            padding: 1 0 0 0;
+            height: 60%;
+            color: $color_1;
+        }
+
+        .eNBsLoadingText {
+            width: 100%;
+            color: $color_1;
+            text-align: center;
+        }
+
+    }
+
+    /* */
+
+}
