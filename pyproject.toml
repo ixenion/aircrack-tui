@@ -70,6 +70,9 @@ aircrack-tui = "aircrack_tui.main:app_entry_point"
 # Dev libs
 [tool.pdm.dev-dependencies]
 test = [
+    "textual-dev==1.7.0",
+    "textual-serve==1.1.1",
+
     "pytest>=8.3.3",
     "pytest-aio>=1.9.0",
     "pytest-timeout>=2.3.1",
