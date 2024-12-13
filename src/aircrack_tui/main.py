@@ -55,10 +55,13 @@ def _app_tui_debug():
 #  MAIN  #
 # ------ #
 
-async def main() -> None:
+def main(debug:bool|None) -> None:
     """
     """
     
+    if debug:
+        with TUIDebug() as tui_app:
+            tui_app.run()
     ...
 
 
@@ -89,7 +92,7 @@ def control(
             "-d",
             "--debug",
             help=f"Start debug display with terminal window specs.",
-            callback=_app_tui_debug,
+            # callback=_app_tui_debug,
             is_eager=True,
             )
 
@@ -111,8 +114,8 @@ def control(
     """
     """
 
-    # asyncio.run(main(mode, consumer, delay))
-    asyncio.run(main())
+    # asyncio.run(main(debug))
+    main(debug)
 
 
 def app_entry_point():

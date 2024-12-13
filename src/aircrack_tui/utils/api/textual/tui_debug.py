@@ -133,7 +133,6 @@ class TUIDebug(App):
         ...
 
 
-
 def main():
     with TUIDebug() as app:
         app.run()
