@@ -72,11 +72,13 @@ PageSizeCheck.PageSizeCheck {
 
         /* Container for button */
         .PageSizeCheck_Btn_1_Container {
-            margin: 1 0 6 0;
-            align: center bottom;
+            margin: 1 6 6 0;
+            align: right bottom;
+            layout: vertical;
 
-            /* BUTTON Continue */
+            /* BUTTON Continue and Exit */
             .PageSizeCheck_Btn_1 {
+                margin: 1 0 1 0;
                 height: 3;
                 width:auto;
                 /*align: center bottom;*/

@@ -129,14 +129,22 @@ class PageSizeCheckContainer(Container):
                 disabled=True,
                 )
 
+        self.btn_exit = Button(
+                label="EXIT",
+                id="PageSizeCheck_Btn_Exit",
+                classes="PageSizeCheck_Btn_1",
+                )
+
         self.btn_continue = Button(
                 label="CONTINUE",
+                id="PageSizeCheck_Btn_Continue",
                 classes="PageSizeCheck_Btn_1",
                 )
 
         # Had to wrap button into Container because
         # Cant set align for button dirrectly.
         self.btn_continue_container = Container(
+                self.btn_exit,
                 self.btn_continue,
                 classes="PageSizeCheck_Btn_1_Container",
                 )
