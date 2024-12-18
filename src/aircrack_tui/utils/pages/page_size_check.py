@@ -239,9 +239,17 @@ class PageSizeCheckContainer(Container):
         inside that class.
         """
 
-        # PageSizeCheckContainer -> PageSizeCheck -> Screen -> TUIMain
-        the_app:App = self.parent.parent.parent
-        the_app.exit(str(event.button))
+        match event.button.id:
+
+            case "PageSizeCheck_Btn_Exit":
+                # PageSizeCheckContainer -> PageSizeCheck -> Screen -> TUIMain
+                the_app:App = self.parent.parent.parent
+                the_app.exit(str(event.button))
+
+            case "PageSizeCheck_Btn_Continue":
+                #TODO: proceed to dependency checks.
+                ...
+
 
 
 # class LoadingErrorPage(Container):
