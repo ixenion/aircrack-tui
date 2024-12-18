@@ -233,6 +233,17 @@ class PageSizeCheckContainer(Container):
             self.btn_continue.remove_class("-hidden")
 
 
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        """
+        Handle button pressed which (buttons) are defined
+        inside that class.
+        """
+
+        # PageSizeCheckContainer -> PageSizeCheck -> Screen -> TUIMain
+        the_app:App = self.parent.parent.parent
+        the_app.exit(str(event.button))
+
+
 # class LoadingErrorPage(Container):
 #     """
 #         This page will be shown if 'Common._get_enbs_integrated()'

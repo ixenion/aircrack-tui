@@ -80,7 +80,7 @@ PageSizeCheck.PageSizeCheck {
             .PageSizeCheck_Btn_1 {
                 margin: 1 0 1 0;
                 height: 3;
-                width:auto;
+                width: 14;
                 /*align: center bottom;*/
                 background: $color_1;
                 color: $background;
