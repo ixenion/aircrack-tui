@@ -18,4 +18,4 @@ def android_hide_keyboard() -> None:
     """
 
     # Send backspace key event
-    system("input keyevent 67")
+    system("input keyevent 4")
