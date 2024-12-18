@@ -24,6 +24,7 @@ from aircrack_tui import __app_name__, __version__
 
 from aircrack_tui.utils.api     import (
         TUIDebug,
+        TUIMain,
         )
 
 
@@ -34,15 +35,6 @@ def _version_callback(value: bool) -> None:
     if value:
         typer.echo(f"{__app_name__} v{__version__}")
         raise typer.Exit()
-
-
-def _app_tui_debug():
-    """
-    Run TUI Debug page.
-    """
-
-    with TUIDebug() as tui_app:
-        tui_app.run()
 
 
 # ------- #
@@ -62,7 +54,10 @@ def main(debug:bool|None) -> None:
     if debug:
         with TUIDebug() as tui_app:
             tui_app.run()
-    ...
+        return
+
+    with TUIMain() as tui_app:
+        tui_app.run()
 
 
 
