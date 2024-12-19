@@ -58,7 +58,9 @@ class TUIMain(App):
             ]
 
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 no_size_check_auto:bool|None,
+                 ) -> None:
         # logger.main.info(f"\n\n\n")
         # logger.main.info(f"Initialising app...")
         super().__init__()
@@ -70,6 +72,7 @@ class TUIMain(App):
 
         self.pressed_keys:list = []
 
+        self.no_size_check_auto:bool|None = no_size_check_auto
         # Log it out
         # logger.main.info(f"Initialising done.")
         # logger.main.info(f"BINDINGS are:\n{self.BINDINGS}")
@@ -79,7 +82,9 @@ class TUIMain(App):
     def compose(self) -> ComposeResult:
         """ Create child widgets for the app."""
         
-        page_size_check = PageSizeCheck()
+        page_size_check = PageSizeCheck(
+                no_size_check_auto=self.no_size_check_auto,
+                )
         page_dependencies_check = PageDependenciesCheck()
         page_main = PageMain()
 

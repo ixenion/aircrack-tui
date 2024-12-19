@@ -91,6 +91,7 @@ class PageSizeCheckContainer(Container):
     """
 
     def __init__(self,
+                 no_size_check_auto:bool|None=None,
                  classes:str="PageSizeCheckContainer",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
@@ -98,6 +99,7 @@ class PageSizeCheckContainer(Container):
         super().__init__(classes=classes)
         self.term_max_width = 49
         self.term_min_width = 47
+        self.autocontinue:bool = False if no_size_check_auto == True else True
 
 
     def compose(self) -> ComposeResult:
@@ -230,6 +232,7 @@ class PageSizeCheckContainer(Container):
         self.parameter_2.value.update(str(height))
         self.parameter_3.value.update(str(ratio))
 
+
         # Gather parameters' colors
         param1_color = self.parameter_1.value.styles.color
         param2_color = self.parameter_2.value.styles.color
@@ -255,7 +258,7 @@ class PageSizeCheckContainer(Container):
             # self.btn_continue.remove_class("-hidden")
             self.btn_continue.disabled = False
 
-        # Show BTN Increase
+        # Show BTN Increase | Decrease
         if width < self.term_min_width and IS_ANDROID:
             # Terminal font size to big
             self.btn_term_increase.add_class("-hidden")
@@ -268,6 +271,16 @@ class PageSizeCheckContainer(Container):
             # Terminal font size is good
             self.btn_term_increase.add_class("-hidden")
             self.btn_term_decrease.add_class("-hidden")
+
+        # IF AUTO CONTINUE
+        if param1_color != self.color_error and self.autocontinue:
+            self.btn_continue.disabled=False
+            self.btn_continue.press()
+        if width > self.term_max_width and self.autocontinue:
+            android_term_inc()
+        if width < self.term_min_width and self.autocontinue:
+            android_term_inc()
+
 
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -293,8 +306,9 @@ class PageSizeCheckContainer(Container):
 
             case "PageSizeCheck_Btn_Continue":
                 #TODO: proceed to dependency checks.
-                the_app.query_one("#ContentSwitcher_Primary").current = \
-                        "PageDependenciesCheck"
+                content_switcher = the_app.query_one("#ContentSwitcher_Primary")
+                if content_switcher.current == "PageSizeCheck":
+                    content_switcher.current = "PageDependenciesCheck"
                 ...
 
 
@@ -599,6 +613,7 @@ class PageSizeCheck(Widget):
             ]
 
     def __init__(self,
+                 no_size_check_auto:bool|None=None,
                  classes:str="PageSizeCheck",
                  id:str="PageSizeCheck",
                  ) -> None:
@@ -608,11 +623,15 @@ class PageSizeCheck(Widget):
         self.border_subtitle = "bottom right"
         self.border_title = "top left"
 
+        self.no_size_check_auto:bool|None = no_size_check_auto
+
 
     def compose(self) -> ComposeResult:
         """ Here default (or other custom) Widgets are combined."""
 
-        yield PageSizeCheckContainer()
+        yield PageSizeCheckContainer(
+                no_size_check_auto=self.no_size_check_auto,
+                )
 
 
     def on_mount(self) -> None:

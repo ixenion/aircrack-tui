@@ -54,10 +54,13 @@ def _version_callback(value: bool) -> None:
 #  MAIN  #
 # ------ #
 
-def main(debug:bool|None) -> None:
+def main(
+        debug:bool|None,
+        no_size_check_auto:bool|None,
+        ) -> None:
     """
     """
-    
+
     if debug:
         with TUIDebug() as tui_app:
             tui_app.run()
@@ -71,7 +74,9 @@ def main(debug:bool|None) -> None:
     if IS_ANDROID:
         android_hide_keyboard()
 
-    with TUIMain() as tui_app:
+    with TUIMain(
+            no_size_check_auto,
+            ) as tui_app:
         tui_app.run()
 
 
@@ -104,6 +109,13 @@ def control(
             help=f"Start debug display with terminal window specs.",
             # callback=_app_tui_debug,
             is_eager=True,
+            ),
+
+        no_size_check_auto: Optional[bool] = typer.Option(
+            None,
+            "--no-size-check-auto",
+            help=f"Forse term size check to manual mode.",
+            is_eager=True,
             )
 
         # mode:Keys.MODE = typer.Option(
@@ -125,7 +137,10 @@ def control(
     """
 
     # asyncio.run(main(debug))
-    main(debug)
+    main(
+            debug=debug,
+            no_size_check_auto=no_size_check_auto,
+            )
 
 
 def app_entry_point():
