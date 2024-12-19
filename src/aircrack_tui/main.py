@@ -26,6 +26,9 @@ from aircrack_tui.utils.api     import (
         TUIDebug,
         TUIMain,
         )
+from aircrack_tui.utils.datastructures  import (
+        IS_ANDROID,
+        )
 from aircrack_tui.utils.simple_tasks    import (
         is_root,
         android_hide_keyboard,
@@ -65,11 +68,8 @@ def main(debug:bool|None) -> None:
         return
 
     # Hide android keyboard in termux
-    try:
+    if IS_ANDROID:
         android_hide_keyboard()
-    except Exception as e:
-        # Skip any exception - if run not on android.
-        pass
 
     with TUIMain() as tui_app:
         tui_app.run()
