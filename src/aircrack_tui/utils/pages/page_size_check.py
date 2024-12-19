@@ -249,9 +249,11 @@ class PageSizeCheckContainer(Container):
 
         # Show btn_continue
         if param1_color == self.color_error or param3_color == self.color_error:
-            self.btn_continue.add_class("-hidden")
+            # self.btn_continue.add_class("-hidden")
+            self.btn_continue.disabled = True
         else:
-            self.btn_continue.remove_class("-hidden")
+            # self.btn_continue.remove_class("-hidden")
+            self.btn_continue.disabled = False
 
         # Show BTN Increase
         if width < self.term_min_width and IS_ANDROID:
