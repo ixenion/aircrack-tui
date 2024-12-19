@@ -96,6 +96,8 @@ class PageSizeCheckContainer(Container):
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
         super().__init__(classes=classes)
+        self.term_max_width = 49
+        self.term_min_width = 47
 
 
     def compose(self) -> ComposeResult:
@@ -206,7 +208,7 @@ class PageSizeCheckContainer(Container):
         ratio = round(width/height, 2)
 
         # Check width:
-        if width > 48 or width < 44:
+        if width > self.term_max_width or width < self.term_min_width:
             self.parameter_1.value.styles.color = \
                     self.color_error
         else:
@@ -252,11 +254,11 @@ class PageSizeCheckContainer(Container):
             self.btn_continue.remove_class("-hidden")
 
         # Show BTN Increase
-        if width < 44 and IS_ANDROID:
+        if width < self.term_min_width and IS_ANDROID:
             # Terminal font size to big
             self.btn_term_increase.add_class("-hidden")
             self.btn_term_decrease.remove_class("-hidden")
-        elif width > 48 and IS_ANDROID:
+        elif width > self.term_max_width and IS_ANDROID:
             # Terminal font size to small
             self.btn_term_increase.remove_class("-hidden")
             self.btn_term_decrease.add_class("-hidden")
