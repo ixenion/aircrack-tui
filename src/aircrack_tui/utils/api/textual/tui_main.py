@@ -17,7 +17,7 @@ from textual import events
 from textual.widgets    import (
         Button, Label, Switch, Input, OptionList,
         TextArea, ListView, ListItem, DataTable,
-        RadioSet, RadioButton, Select, SelectionList,
+        RadioSet, RadioButton, Select, SelectionList, ContentSwitcher,
         )
 
 # ------------- #
@@ -30,6 +30,7 @@ from aircrack_tui.utils.datastructures  import (
 from aircrack_tui.utils.pages           import (
         PageMain,
         PageSizeCheck,
+        PageDependenciesCheck,
         )
 
 
@@ -50,8 +51,10 @@ class TUIMain(App):
     #         ("up", "focus_previous", "Prev"),
     #         ]
     CSS_PATH = [
+            Path(STYLES_PATH, 'page_primary.tcss'),
             Path(STYLES_PATH, 'page_size_check.tcss'),
-            # Path(STYLES_PATH, 'page_main.tcss'),
+            Path(STYLES_PATH, 'page_dependencies_check.tcss'),
+            Path(STYLES_PATH, 'page_main.tcss'),
             ]
 
 
@@ -76,14 +79,20 @@ class TUIMain(App):
     def compose(self) -> ComposeResult:
         """ Create child widgets for the app."""
         
-        page_main = PageMain()
         page_size_check = PageSizeCheck()
+        page_dependencies_check = PageDependenciesCheck()
+        page_main = PageMain()
 
         # self.tab_pages.append(page_common)
         # page_main = Main(self.tab_pages)
 
-        yield page_size_check
-        # yield page_main
+        with ContentSwitcher(
+                id="ContentSwitcher_Primary",
+                initial="PageSizeCheck",
+                ):  
+            yield page_size_check
+            yield page_dependencies_check
+            # yield page_main
 
 
     # def action_toggle_dark(self) -> None:

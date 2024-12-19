@@ -1,0 +1,140 @@
+/* CONSTANTS */
+$color_1: $accent-lighten-2;
+$color_2: $foreground 30%;
+$color_3: $secondary;
+$error_1: crimson 100%;
+
+
+/* CHECK SCREEN */
+PageDependenciesCheck.PageDependenciesCheck {
+    border: heavy $color_1;
+    /*layer: page_debug;*/
+    layers: page_size_check_container;
+    display: block;
+    &.-hidden {
+        display: none;
+    }
+
+
+    /* PAGE SIZE CHECK CONTAINER */
+    .PageSizeCheckContainer {
+        layer: page_size_check_container;
+
+        .PageSizeCheck_Title {
+            width: 100%;
+            height: auto;
+            margin: 3 0 1 0;
+            color: $color_1;
+            text-align: center;
+        }
+
+        .PageSizeCheck_LoadingIndicator_1 {
+            padding: 0 0 0 0;
+            margin: 1 0 2 0;
+            height: 1;
+            color: $color_1;
+            align: center top;
+        }
+
+        /* PARAMETER-VALUE widgets */
+        .ParameterValue1 {
+            layout: horizontal;
+            width: 100%;
+            height: 1;
+            margin: 1 0 1 0;
+            align: center top;
+
+            .Parameter_1 {
+                color: $color_1;
+                margin: 0 1 0 1;
+            /* text-align: center; */
+            }
+
+            .Value_1 {
+                color: $error-lighten-1;
+                margin: 0 1 0 1;
+            /* text-align: center; */
+            }
+
+        }
+
+        /* Both hints are defined here */
+        .PageSizeCheck_Hint_1 {
+            width: 100%;
+            margin: 1 0 1 0;
+            color: $color_1;
+            text-align: center;
+            
+            &.-hidden {
+                display: none;
+            }
+        }
+
+        /* Container for button */
+        .PageSizeCheck_Btn_1_Container {
+            margin: 1 6 6 0;
+            align: right bottom;
+            layout: vertical;
+
+            /* BUTTON Continue and Exit */
+            .PageSizeCheck_Btn_1 {
+                margin: 1 0 1 0;
+                height: 3;
+                width: 14;
+                /*align: center bottom;*/
+                background: $color_1;
+                color: $background;
+                border: blank $color_1;
+                border-top: none;
+                border-bottom: none;
+                text-style: bold;
+
+                &.-hidden {
+                    display: none;
+                }
+            }
+
+            /* Buttons Increase Decrease term forn size */
+            #PageSizeCheck_Btn_TermIncrease {
+                margin: 1 0 1 0;
+                height: 3;
+                width: 14;
+                /*align: center bottom;*/
+                background: $success;
+                color: $background;
+                border: blank $color_1;
+                border-top: none;
+                border-bottom: none;
+                text-style: bold;
+
+                    &.-hidden {
+                        display: none;
+                    }
+                }
+            #PageSizeCheck_Btn_TermDecrease {
+                margin: 1 0 1 0;
+                height: 3;
+                width: 14;
+                /*align: center bottom;*/
+                background: $error-lighten-1;
+                color: $background;
+                border: blank $color_1;
+                border-top: none;
+                border-bottom: none;
+                text-style: bold;
+
+                    &.-hidden {
+                        display: none;
+                    }
+                }
+
+
+
+        }
+
+
+    }
+
+    /* */
+
+}

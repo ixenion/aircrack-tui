@@ -432,8 +432,9 @@ class PageMain(Widget):
 
     def on_mount(self) -> None:
         # Show LoadingPage and hide other
-        page_main = self.query_one(PageMainContainer)
-        page_main.add_class("-hidden")
+        # page_main = self.query_one(PageMainContainer)
+        # page_main.add_class("-hidden")
+        self.add_class("-hidden")
 
         # loading_error.add_class("-hidden")
         # loading_success.add_class("-hidden")

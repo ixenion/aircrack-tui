@@ -1,0 +1,12 @@
+/* CONSTANTS */
+$color_1: $accent-lighten-2;
+$color_2: $foreground 30%;
+$color_3: $secondary;
+$error_1: crimson 100%;
+
+
+/* Primary SCREEN */
+ContentSwitcher {
+    height: 1fr;
+    width: 100%;
+}

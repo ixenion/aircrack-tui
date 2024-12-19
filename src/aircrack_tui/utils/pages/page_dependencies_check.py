@@ -96,15 +96,13 @@ class PageSizeCheckContainer(Container):
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
         super().__init__(classes=classes)
-        self.term_max_width = 49
-        self.term_min_width = 47
 
 
     def compose(self) -> ComposeResult:
         """ Here default (or other custom) Widgets are combined."""
 
         self.title = Label(
-                renderable="Checking term window size",
+                renderable="Checking dependencies",
                 classes="PageSizeCheck_Title",
                 disabled=True,
                 )
@@ -115,69 +113,9 @@ class PageSizeCheckContainer(Container):
                 disabled=True,
                 )
 
-        self.parameter_1 = ParameterValue1(
-                parameter_name="Width:")
-
-        self.parameter_2 = ParameterValue1(
-                parameter_name="Height:")
-
-        self.parameter_3 = ParameterValue1(
-                parameter_name="Ratio:")
-
-        self.hint_1 = Label(
-                renderable="( Set 'Width' between 44-48 )",
-                classes="PageSizeCheck_Hint_1",
-                disabled=True,
-                )
-
-        self.hint_2 = Label(
-                renderable="( Make screen vertical OR hide keyboard)",
-                classes="PageSizeCheck_Hint_1",
-                disabled=True,
-                )
-
-        self.btn_exit = Button(
-                label="EXIT",
-                id="PageSizeCheck_Btn_Exit",
-                classes="PageSizeCheck_Btn_1",
-                )
-
-        self.btn_continue = Button(
-                label="CONTINUE",
-                id="PageSizeCheck_Btn_Continue",
-                classes="PageSizeCheck_Btn_1",
-                )
-
-        self.btn_term_increase = Button(
-                label="] + [",
-                id="PageSizeCheck_Btn_TermIncrease",
-                classes="-hidden",
-                )
-
-        self.btn_term_decrease = Button(
-                label="] - [",
-                id="PageSizeCheck_Btn_TermDecrease",
-                classes="-hidden",
-                )
-
-        # Had to wrap button into Container because
-        # Cant set align for button dirrectly.
-        self.btns_container = Container(
-                self.btn_exit,
-                self.btn_term_increase,
-                self.btn_term_decrease,
-                self.btn_continue,
-                classes="PageSizeCheck_Btn_1_Container",
-                )
-
         yield self.title
         yield self.indicator
-        yield self.parameter_1
-        yield self.parameter_2
-        yield self.parameter_3
-        yield self.hint_1
-        yield self.hint_2
-        yield self.btns_container
+
 
     def on_mount(self):
         """
@@ -193,107 +131,28 @@ class PageSizeCheckContainer(Container):
         # self.btn_continue.styles.align_horizontal = "right"
 
 
+    #def on_button_pressed(self, event: Button.Pressed) -> None:
+    #    """
+    #    Handle button pressed which (buttons) are defined
+    #    inside that class.
+    #    """
 
-    def on_resize(self, event:Resize):
-        """
-        Called every time terminal window was resized or
-        terminal font size was changed.
-        """
-            
-        # Get the terminal size
-        terminal_size = get_terminal_size()
-        # Access the width (columns) and height (lines)
-        width = terminal_size.columns
-        height = terminal_size.lines
-        ratio = round(width/height, 2)
+    #    match event.button.id:
 
-        # Check width:
-        if width > self.term_max_width or width < self.term_min_width:
-            self.parameter_1.value.styles.color = \
-                    self.color_error
-        else:
-            self.parameter_1.value.styles.color = \
-                    self.color_success
+    #        case "PageSizeCheck_Btn_Exit":
+    #            # PageSizeCheckContainer -> PageSizeCheck -> Screen -> TUIMain
+    #            the_app:App = self.parent.parent.parent
+    #            the_app.exit(str(event.button))
 
-        # Check height
-        self.parameter_2.value.styles.color = self.color_text
+    #        case "PageSizeCheck_Btn_TermIncrease":
+    #            android_term_inc()
 
-        # Check ratio:
-        if ratio > 1.25 or ratio < 0.75:
-            self.parameter_3.value.styles.color = \
-                    self.color_error
-        else:
-            self.parameter_3.value.styles.color = \
-                    self.color_success
+    #        case "PageSizeCheck_Btn_TermDecrease":
+    #            android_term_dec()
 
-        self.parameter_1.value.update(str(width))
-        self.parameter_2.value.update(str(height))
-        self.parameter_3.value.update(str(ratio))
-
-        # Gather parameters' colors
-        param1_color = self.parameter_1.value.styles.color
-        param2_color = self.parameter_2.value.styles.color
-        param3_color = self.parameter_3.value.styles.color
-        
-        # Show hint for Width
-        if param1_color == self.color_error:
-            self.hint_1.remove_class("-hidden")
-        else:
-            self.hint_1.add_class("-hidden")
-
-        # Show hint for Ratio
-        if param3_color == self.color_error:
-            self.hint_2.remove_class("-hidden")
-        else:
-            self.hint_2.add_class("-hidden")
-
-        # Show btn_continue
-        if param1_color == self.color_error or param3_color == self.color_error:
-            self.btn_continue.add_class("-hidden")
-        else:
-            self.btn_continue.remove_class("-hidden")
-
-        # Show BTN Increase
-        if width < self.term_min_width and IS_ANDROID:
-            # Terminal font size to big
-            self.btn_term_increase.add_class("-hidden")
-            self.btn_term_decrease.remove_class("-hidden")
-        elif width > self.term_max_width and IS_ANDROID:
-            # Terminal font size to small
-            self.btn_term_increase.remove_class("-hidden")
-            self.btn_term_decrease.add_class("-hidden")
-        else:
-            # Terminal font size is good
-            self.btn_term_increase.add_class("-hidden")
-            self.btn_term_decrease.add_class("-hidden")
-
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        """
-        Handle button pressed which (buttons) are defined
-        inside that class.
-        """
-
-        the_app:App = self.parent.parent.parent.parent
-        
-        match event.button.id:
-
-            case "PageSizeCheck_Btn_Exit":
-                # PageSizeCheckContainer -> PageSizeCheck -> \
-                # ContentSwitcher_Primary -> Screen -> TUIMain
-                the_app.exit(str(event.button))
-
-            case "PageSizeCheck_Btn_TermIncrease":
-                android_term_inc()
-
-            case "PageSizeCheck_Btn_TermDecrease":
-                android_term_dec()
-
-            case "PageSizeCheck_Btn_Continue":
-                #TODO: proceed to dependency checks.
-                the_app.query_one("#ContentSwitcher_Primary").current = \
-                        "PageDependenciesCheck"
-                ...
+    #        case "PageSizeCheck_Btn_Continue":
+    #            #TODO: proceed to dependency checks.
+    #            ...
 
 
 
@@ -585,7 +444,7 @@ class PageSizeCheckContainer(Container):
 
 
     
-class PageSizeCheck(Widget):
+class PageDependenciesCheck(Widget):
     """
     """
 
@@ -597,14 +456,15 @@ class PageSizeCheck(Widget):
             ]
 
     def __init__(self,
-                 classes:str="PageSizeCheck",
-                 id:str="PageSizeCheck",
+                 classes:str="PageDependenciesCheck",
+                 id:str="PageDependenciesCheck",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
-        super().__init__(classes=classes, id=id)
-        self.border_subtitle = "bottom right"
-        self.border_title = "top left"
+        super().__init__(
+                classes=classes,
+                id=id,
+                )
 
 
     def compose(self) -> ComposeResult:
@@ -617,4 +477,5 @@ class PageSizeCheck(Widget):
         """
         """
 
+        # self.add_class("-hidden")
         self.remove_class("-hidden")
