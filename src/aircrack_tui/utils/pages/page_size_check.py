@@ -30,6 +30,11 @@ from textual.widgets    import (
 
 from aircrack_tui.utils.datastructures  import (
         STYLES_PATH,
+        IS_ANDROID,
+        )
+from aircrack_tui.utils.simple_tasks    import (
+        android_term_inc,
+        android_term_dec,
         )
 
 
@@ -141,10 +146,24 @@ class PageSizeCheckContainer(Container):
                 classes="PageSizeCheck_Btn_1",
                 )
 
+        self.btn_term_increase = Button(
+                label="] + [",
+                id="PageSizeCheck_Btn_TermIncrease",
+                classes="-hidden",
+                )
+
+        self.btn_term_decrease = Button(
+                label="] - [",
+                id="PageSizeCheck_Btn_TermDecrease",
+                classes="-hidden",
+                )
+
         # Had to wrap button into Container because
         # Cant set align for button dirrectly.
-        self.btn_continue_container = Container(
+        self.btns_container = Container(
                 self.btn_exit,
+                self.btn_term_increase,
+                self.btn_term_decrease,
                 self.btn_continue,
                 classes="PageSizeCheck_Btn_1_Container",
                 )
@@ -156,7 +175,7 @@ class PageSizeCheckContainer(Container):
         yield self.parameter_3
         yield self.hint_1
         yield self.hint_2
-        yield self.btn_continue_container
+        yield self.btns_container
 
     def on_mount(self):
         """
@@ -232,6 +251,20 @@ class PageSizeCheckContainer(Container):
         else:
             self.btn_continue.remove_class("-hidden")
 
+        # Show BTN Increase
+        if width < 44 and IS_ANDROID:
+            # Terminal font size to big
+            self.btn_term_increase.add_class("-hidden")
+            self.btn_term_decrease.remove_class("-hidden")
+        elif width > 48 and IS_ANDROID:
+            # Terminal font size to small
+            self.btn_term_increase.remove_class("-hidden")
+            self.btn_term_decrease.add_class("-hidden")
+        else:
+            # Terminal font size is good
+            self.btn_term_increase.add_class("-hidden")
+            self.btn_term_decrease.add_class("-hidden")
+
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """
@@ -245,6 +278,12 @@ class PageSizeCheckContainer(Container):
                 # PageSizeCheckContainer -> PageSizeCheck -> Screen -> TUIMain
                 the_app:App = self.parent.parent.parent
                 the_app.exit(str(event.button))
+
+            case "PageSizeCheck_Btn_TermIncrease":
+                android_term_inc()
+
+            case "PageSizeCheck_Btn_TermDecrease":
+                android_term_dec()
 
             case "PageSizeCheck_Btn_Continue":
                 #TODO: proceed to dependency checks.

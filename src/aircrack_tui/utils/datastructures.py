@@ -14,6 +14,14 @@ from pathlib        import Path
 # import toml
 
 
+# ------------- #
+# Local imports #
+
+from aircrack_tui.utils.simple_tasks    import (
+        get_system,
+        )
+
+
 
 #############
 # CONSTANTS #
@@ -34,6 +42,8 @@ STYLES_PATH  = Path(
         Path(os_path.abspath(__file__)).parent,
         "styles"
         )
+
+IS_ANDROID:bool = get_system()
 
 
 ########
