@@ -9,7 +9,7 @@ $error_1: crimson 100%;
 PageDependenciesCheck.PageDependenciesCheck {
     border: heavy $color_1;
     /*layer: page_debug;*/
-    layers: page_size_check_container;
+    layers: page_dependencies_check_container;
     display: block;
     &.-hidden {
         display: none;
@@ -17,10 +17,10 @@ PageDependenciesCheck.PageDependenciesCheck {
 
 
     /* PAGE SIZE CHECK CONTAINER */
-    .PageSizeCheckContainer {
-        layer: page_size_check_container;
+    .PageDependenciesCheckContainer {
+        layer: page_dependencies_check_container;
 
-        .PageSizeCheck_Title {
+        .PageDependenciesCheck_Title {
             width: 100%;
             height: auto;
             margin: 3 0 1 0;
@@ -28,7 +28,7 @@ PageDependenciesCheck.PageDependenciesCheck {
             text-align: center;
         }
 
-        .PageSizeCheck_LoadingIndicator_1 {
+        .PageDependenciesCheck_LoadingIndicator_1 {
             padding: 0 0 0 0;
             margin: 1 0 2 0;
             height: 1;
@@ -58,26 +58,14 @@ PageDependenciesCheck.PageDependenciesCheck {
 
         }
 
-        /* Both hints are defined here */
-        .PageSizeCheck_Hint_1 {
-            width: 100%;
-            margin: 1 0 1 0;
-            color: $color_1;
-            text-align: center;
-            
-            &.-hidden {
-                display: none;
-            }
-        }
-
         /* Container for button */
-        .PageSizeCheck_Btn_1_Container {
+        .PageDependenciesCheck_Btn_1_Container {
             margin: 1 6 6 0;
             align: right bottom;
             layout: vertical;
 
             /* BUTTON Continue and Exit */
-            .PageSizeCheck_Btn_1 {
+            .PageDependenciesCheck_Btn_1 {
                 margin: 1 0 1 0;
                 height: 3;
                 width: 14;
@@ -93,42 +81,6 @@ PageDependenciesCheck.PageDependenciesCheck {
                     display: none;
                 }
             }
-
-            /* Buttons Increase Decrease term forn size */
-            #PageSizeCheck_Btn_TermIncrease {
-                margin: 1 0 1 0;
-                height: 3;
-                width: 14;
-                /*align: center bottom;*/
-                background: $success;
-                color: $background;
-                border: blank $color_1;
-                border-top: none;
-                border-bottom: none;
-                text-style: bold;
-
-                    &.-hidden {
-                        display: none;
-                    }
-                }
-            #PageSizeCheck_Btn_TermDecrease {
-                margin: 1 0 1 0;
-                height: 3;
-                width: 14;
-                /*align: center bottom;*/
-                background: $error-lighten-1;
-                color: $background;
-                border: blank $color_1;
-                border-top: none;
-                border-bottom: none;
-                text-style: bold;
-
-                    &.-hidden {
-                        display: none;
-                    }
-                }
-
-
 
         }
 

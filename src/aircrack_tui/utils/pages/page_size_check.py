@@ -305,11 +305,9 @@ class PageSizeCheckContainer(Container):
                 android_term_dec()
 
             case "PageSizeCheck_Btn_Continue":
-                #TODO: proceed to dependency checks.
                 content_switcher = the_app.query_one("#ContentSwitcher_Primary")
                 if content_switcher.current == "PageSizeCheck":
                     content_switcher.current = "PageDependenciesCheck"
-                ...
 
 
 
