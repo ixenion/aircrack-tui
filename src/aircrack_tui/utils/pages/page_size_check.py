@@ -202,6 +202,7 @@ class PageSizeCheckContainer(Container):
         if IS_ANDROID:
             if android_is_keyboard_shown():
                 android_hide_keyboard()
+                return
             
         # Get the terminal size
         terminal_size = get_terminal_size()

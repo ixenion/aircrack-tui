@@ -4,7 +4,7 @@
 
 import asyncio
 from dataclasses            import asdict
-from os                     import geteuid
+from os                     import geteuid, system
 from pprint                 import pprint
 from time                   import time, gmtime, strftime
 from typing                 import AsyncGenerator, Optional
