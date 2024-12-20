@@ -36,7 +36,7 @@ from aircrack_tui.utils.simple_tasks    import (
         android_hide_keyboard,
         android_term_inc,
         android_term_dec,
-        android_is_keyboard_hidden,
+        android_is_keyboard_shown,
         )
 
 
@@ -200,7 +200,7 @@ class PageSizeCheckContainer(Container):
         """
 
         if IS_ANDROID:
-            if not android_is_keyboard_hidden():
+            if android_is_keyboard_shown():
                 android_hide_keyboard()
             
         # Get the terminal size

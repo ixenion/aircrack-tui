@@ -62,7 +62,7 @@ def android_term_dec() -> None:
     system("sudo input keycombination 113 57 156")
 
 
-def android_is_keyboard_hidden() -> bool:
+def android_is_keyboard_shown() -> bool:
     """
     Check does keyboard hidden on android or where!?
     """
