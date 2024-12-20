@@ -271,7 +271,8 @@ class PageSizeCheckContainer(Container):
 
         # IF AUTO CONTINUE
         if param1_color != self.color_error and self.autocontinue \
-                and self.first_on_resize_check:
+                and self.first_on_resize_check \
+                and not android_is_keyboard_shown():
             self.btn_continue.press()
 
         # IF autosize btn pressed
