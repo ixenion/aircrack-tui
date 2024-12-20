@@ -66,10 +66,6 @@ def main(
             tui_app.run()
         return
 
-    # Hide android keyboard in termux
-    if IS_ANDROID:
-        android_hide_keyboard()
-
     with TUIMain(
             no_size_check_auto,
             ) as tui_app:

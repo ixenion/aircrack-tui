@@ -60,3 +60,24 @@ def android_term_dec() -> None:
     # Need to translate from hex to dec.
     # CTRL_LEFT ALT_LEFT NUMPAD_SUBTRACT (-)
     system("sudo input keycombination 113 57 156")
+
+
+def android_is_keyboard_hidden() -> bool:
+    """
+    Check does keyboard hidden on android or where!?
+    """
+
+    # Example command
+    command = "sudo dumpsys input_method | grep mInputShown"
+
+    # Run the command synchronously and capture the output
+    result = subprocess.run(command, shell=True, text=True, capture_output=True)
+    
+    # Check if the command was successful
+    if result.returncode == 0:
+        response = result.stdout
+        if "true" in response:
+            return True
+        return False
+    else:
+        return False

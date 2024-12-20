@@ -33,8 +33,10 @@ from aircrack_tui.utils.datastructures  import (
         IS_ANDROID,
         )
 from aircrack_tui.utils.simple_tasks    import (
+        android_hide_keyboard,
         android_term_inc,
         android_term_dec,
+        android_is_keyboard_hidden,
         )
 
 
@@ -196,6 +198,10 @@ class PageSizeCheckContainer(Container):
         Called every time terminal window was resized or
         terminal font size was changed.
         """
+
+        if IS_ANDROID:
+            if not android_is_keyboard_hidden():
+                android_hide_keyboard()
             
         # Get the terminal size
         terminal_size = get_terminal_size()
