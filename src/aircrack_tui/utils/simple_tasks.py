@@ -19,7 +19,7 @@ def android_hide_keyboard() -> None:
     """
 
     # Send backspace key event
-    system("input keyevent 4")
+    system("sudo input keyevent 4")
 
 
 def get_system() -> bool:
@@ -52,11 +52,11 @@ def android_term_inc() -> None:
     # Data codes from https://www.temblast.com/ref/akeyscode.htm
     # Need to translate from hex to dec.
     # CTRL_LEFT ALT_LEFT NUMPAD_ADD (+)
-    system("input keycombination 113 57 157")
+    system("sudo input keycombination 113 57 157")
 
 def android_term_dec() -> None:
     
     # Data codes from https://www.temblast.com/ref/akeyscode.htm
     # Need to translate from hex to dec.
     # CTRL_LEFT ALT_LEFT NUMPAD_SUBTRACT (-)
-    system("input keycombination 113 57 156")
+    system("sudo input keycombination 113 57 156")
