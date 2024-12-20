@@ -76,7 +76,7 @@ PageSizeCheck.PageSizeCheck {
             align: right bottom;
             layout: vertical;
 
-            /* BUTTON Continue and Exit */
+            /* BUTTON Continue and Exit And TermAutosize */
             .PageSizeCheck_Btn_1 {
                 margin: 1 0 1 0;
                 height: 3;

@@ -100,6 +100,8 @@ class PageSizeCheckContainer(Container):
         self.term_max_width = 49
         self.term_min_width = 47
         self.autocontinue:bool = False if no_size_check_auto == True else True
+        self.first_on_resize_check:bool = True
+        self.autosize_pressed:bool = False
 
 
     def compose(self) -> ComposeResult:
@@ -150,24 +152,17 @@ class PageSizeCheckContainer(Container):
                 classes="PageSizeCheck_Btn_1",
                 )
 
-        self.btn_term_increase = Button(
-                label="] + [",
-                id="PageSizeCheck_Btn_TermIncrease",
-                classes="-hidden",
-                )
-
-        self.btn_term_decrease = Button(
-                label="] - [",
-                id="PageSizeCheck_Btn_TermDecrease",
-                classes="-hidden",
+        self.btn_term_autosize = Button(
+                label="AUTOSIZE",
+                id="PageSizeCheck_Btn_TermAutosize",
+                classes="PageSizeCheck_Btn_1",
                 )
 
         # Had to wrap button into Container because
         # Cant set align for button dirrectly.
         self.btns_container = Container(
                 self.btn_exit,
-                self.btn_term_increase,
-                self.btn_term_decrease,
+                self.btn_term_autosize,
                 self.btn_continue,
                 classes="PageSizeCheck_Btn_1_Container",
                 )
@@ -259,27 +254,28 @@ class PageSizeCheckContainer(Container):
             self.btn_continue.disabled = False
 
         # Show BTN Increase | Decrease
-        if width < self.term_min_width and IS_ANDROID:
+        if (width < self.term_min_width or width > self.term_max_width) \
+                and IS_ANDROID:
             # Terminal font size to big
-            self.btn_term_increase.add_class("-hidden")
-            self.btn_term_decrease.remove_class("-hidden")
-        elif width > self.term_max_width and IS_ANDROID:
-            # Terminal font size to small
-            self.btn_term_increase.remove_class("-hidden")
-            self.btn_term_decrease.add_class("-hidden")
+            self.btn_term_autosize.remove_class("-hidden")
         else:
             # Terminal font size is good
-            self.btn_term_increase.add_class("-hidden")
-            self.btn_term_decrease.add_class("-hidden")
+            self.btn_term_autosize.add_class("-hidden")
 
         # IF AUTO CONTINUE
-        if param1_color != self.color_error and self.autocontinue:
-            self.btn_continue.disabled=False
+        if param1_color != self.color_error and self.autocontinue \
+                and self.first_on_resize_check:
             self.btn_continue.press()
-        if width > self.term_max_width and self.autocontinue:
-            android_term_inc()
-        if width < self.term_min_width and self.autocontinue:
-            android_term_dec()
+
+        # IF autosize btn pressed
+        if self.autosize_pressed:
+            if width > self.term_max_width and self.autocontinue:
+                android_term_inc()
+            if width < self.term_min_width and self.autocontinue:
+                android_term_dec()
+
+
+        self.first_on_resize_check = False
 
 
 
@@ -298,11 +294,8 @@ class PageSizeCheckContainer(Container):
                 # ContentSwitcher_Primary -> Screen -> TUIMain
                 the_app.exit(str(event.button))
 
-            case "PageSizeCheck_Btn_TermIncrease":
-                android_term_inc()
-
-            case "PageSizeCheck_Btn_TermDecrease":
-                android_term_dec()
+            case "PageSizeCheck_Btn_TermAutosize":
+                self.autosize_pressed = True
 
             case "PageSizeCheck_Btn_Continue":
                 content_switcher = the_app.query_one("#ContentSwitcher_Primary")
