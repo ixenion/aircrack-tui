@@ -66,10 +66,6 @@ def main(
             tui_app.run()
         return
 
-    if not is_root():
-        print(f"[!] Need root access to work with logical cards.")
-        return
-
     # Hide android keyboard in termux
     if IS_ANDROID:
         android_hide_keyboard()
