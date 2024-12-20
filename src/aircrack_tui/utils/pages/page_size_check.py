@@ -271,7 +271,7 @@ class PageSizeCheckContainer(Container):
         if self.autosize_pressed:
             if width > self.term_max_width and self.autocontinue:
                 android_term_inc()
-            if width < self.term_min_width and self.autocontinue:
+            elif width < self.term_min_width and self.autocontinue:
                 android_term_dec()
 
 
@@ -296,6 +296,8 @@ class PageSizeCheckContainer(Container):
 
             case "PageSizeCheck_Btn_TermAutosize":
                 self.autosize_pressed = True
+                self.btn_term_autosize.add_class("-hidden")
+                android_term_inc()
 
             case "PageSizeCheck_Btn_Continue":
                 content_switcher = the_app.query_one("#ContentSwitcher_Primary")
