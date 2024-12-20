@@ -253,9 +253,9 @@ class PageSizeCheckContainer(Container):
             # self.btn_continue.remove_class("-hidden")
             self.btn_continue.disabled = False
 
-        # Show BTN Autosize
+        # Show BTN Increase | Decrease
         if (width < self.term_min_width or width > self.term_max_width) \
-                and IS_ANDROID and not self.autosize_pressed:
+                and IS_ANDROID:
             # Terminal font size to big
             self.btn_term_autosize.remove_class("-hidden")
         else:
