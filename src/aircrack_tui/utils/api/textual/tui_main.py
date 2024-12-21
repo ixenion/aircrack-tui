@@ -60,6 +60,7 @@ class TUIMain(App):
 
     def __init__(self,
                  no_size_check_auto:bool|None,
+                 force_checks_skip:bool|None,
                  ) -> None:
         # logger.main.info(f"\n\n\n")
         # logger.main.info(f"Initialising app...")
@@ -73,6 +74,7 @@ class TUIMain(App):
         self.pressed_keys:list = []
 
         self.no_size_check_auto:bool|None = no_size_check_auto
+        self.force_checks_skip:bool|None = force_checks_skip
         # Log it out
         # logger.main.info(f"Initialising done.")
         # logger.main.info(f"BINDINGS are:\n{self.BINDINGS}")
@@ -84,6 +86,7 @@ class TUIMain(App):
         
         page_size_check = PageSizeCheck(
                 no_size_check_auto=self.no_size_check_auto,
+                force_checks_skip=self.force_checks_skip,
                 )
         page_dependencies_check = PageDependenciesCheck()
         page_main = PageMain()

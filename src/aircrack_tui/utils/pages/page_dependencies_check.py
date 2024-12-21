@@ -184,7 +184,7 @@ class PageDependenciesCheck(Widget):
         # ("r", "remove_stopwatch", "Remove"),
     ]
     CSS_PATH = [
-            Path(STYLES_PATH, "page_check_size.tcss"),
+            Path(STYLES_PATH, "page_check_dependencies.tcss"),
             ]
 
     def __init__(self,

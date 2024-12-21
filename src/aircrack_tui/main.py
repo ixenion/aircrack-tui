@@ -57,9 +57,11 @@ def _version_callback(value: bool) -> None:
 def main(
         debug:bool|None,
         no_size_check_auto:bool|None,
+        force_checks_skip:bool|None,
         ) -> None:
     """
     """
+
 
     if debug:
         with TUIDebug() as tui_app:
@@ -71,6 +73,7 @@ def main(
 
     with TUIMain(
             no_size_check_auto,
+            force_checks_skip,
             ) as tui_app:
         tui_app.run()
 
@@ -111,6 +114,13 @@ def control(
             "--no-size-check-auto",
             help=f"Forse term size check to manual mode.",
             is_eager=True,
+            ),
+
+        force_checks_skip: Optional[bool] = typer.Option(
+            None,
+            "-f",
+            help=f"Skip term size check and dependencies checks.",
+            is_eager=True,
             )
 
         # mode:Keys.MODE = typer.Option(
@@ -131,10 +141,12 @@ def control(
     """
     """
 
+
     # asyncio.run(main(debug))
     main(
             debug=debug,
             no_size_check_auto=no_size_check_auto,
+            force_checks_skip=force_checks_skip,
             )
 
 
