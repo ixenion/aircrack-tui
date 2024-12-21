@@ -66,6 +66,9 @@ def main(
             tui_app.run()
         return
 
+    if IS_ANDROID:
+        system("sudo echo [*] Requesting root access...")
+
     with TUIMain(
             no_size_check_auto,
             ) as tui_app:
