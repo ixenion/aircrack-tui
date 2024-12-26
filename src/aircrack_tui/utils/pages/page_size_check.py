@@ -94,7 +94,6 @@ class PageSizeCheckContainer(Container):
 
     def __init__(self,
                  no_size_check_auto:bool|None=None,
-                 force_checks_skip:bool|None=None,
                  classes:str="PageSizeCheckContainer",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
@@ -103,7 +102,6 @@ class PageSizeCheckContainer(Container):
         self.term_max_width = 49
         self.term_min_width = 47
         self.autocontinue:bool = False if no_size_check_auto == True else True
-        self.force_checks_skip:bool = True if force_checks_skip == True else False
         self.first_on_resize_check:bool = True
         self.autosize_pressed:bool = False
 
@@ -205,8 +203,6 @@ class PageSizeCheckContainer(Container):
             if android_is_keyboard_shown():
                 android_hide_keyboard()
                 return
-        if self.force_checks_skip:
-            self.btn_continue.press()
             
         # Get the terminal size
         terminal_size = get_terminal_size()
@@ -332,7 +328,6 @@ class PageSizeCheck(Widget):
 
     def __init__(self,
                  no_size_check_auto:bool|None=None,
-                 force_checks_skip:bool|None=None,
                  classes:str="PageSizeCheck",
                  id:str="PageSizeCheck",
                  ) -> None:
@@ -343,7 +338,6 @@ class PageSizeCheck(Widget):
         self.border_title = "top left"
 
         self.no_size_check_auto:bool|None = no_size_check_auto
-        self.force_checks_skip:bool|None = force_checks_skip
 
 
     def compose(self) -> ComposeResult:
@@ -351,7 +345,6 @@ class PageSizeCheck(Widget):
 
         yield PageSizeCheckContainer(
                 no_size_check_auto=self.no_size_check_auto,
-                force_checks_skip=self.force_checks_skip,
                 )
 
 

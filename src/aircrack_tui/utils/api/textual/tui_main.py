@@ -65,13 +65,9 @@ class TUIMain(App):
         # logger.main.info(f"\n\n\n")
         # logger.main.info(f"Initialising app...")
         super().__init__()
-        self.tab_pages:list = []
-        self.gpio_process:mpProcess|None = None
 
         # Apply theme (light/dark) from config
         # self.dark = config["dark"]
-
-        self.pressed_keys:list = []
 
         self.no_size_check_auto:bool|None = no_size_check_auto
         self.force_checks_skip:bool|None = force_checks_skip
@@ -86,21 +82,23 @@ class TUIMain(App):
         
         page_size_check = PageSizeCheck(
                 no_size_check_auto=self.no_size_check_auto,
-                force_checks_skip=self.force_checks_skip,
                 )
-        page_dependencies_check = PageDependenciesCheck()
+        page_dependencies_check = PageDependenciesCheck(
+                )
         page_main = PageMain()
 
-        # self.tab_pages.append(page_common)
-        # page_main = Main(self.tab_pages)
+        if self.force_checks_skip == True:
+            initial = "PageMain"
+        else:
+            initial = "PageSizeCheck"
 
         with ContentSwitcher(
                 id="ContentSwitcher_Primary",
-                initial="PageSizeCheck",
+                initial=initial,
                 ):  
             yield page_size_check
             yield page_dependencies_check
-            # yield page_main
+            yield page_main
 
 
     # def action_toggle_dark(self) -> None:

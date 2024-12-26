@@ -24,21 +24,16 @@ PageMain.PageMain {
             display: none;
         }
 
-        .PageDebug_LoadingIndicator {
+        .Temp {
             padding: 0 0 0 0;
             margin: 1 0 3 0;
-            height: 1;
+            height: 3;
+            width: 100%;
             color: $color_1;
             align: center top;
+            text-align: center;
+            border: tall red;
         }
-
-        .PageDebug_Text {
-            width: 100%;
-            margin: 1 0 1 2;
-            color: $color_1;
-            /* text-align: center; */
-        }
-
 
     }
 
