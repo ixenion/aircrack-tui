@@ -89,11 +89,14 @@ class PageDependenciesCheckContainer(Container):
     """
 
     def __init__(self,
+            no_auto_checks:bool|None,
             classes:str="PageDependenciesCheckContainer",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
         super().__init__(classes=classes)
+
+        self.no_auto_checks:bool|None=no_auto_checks
 
 
     def compose(self) -> ComposeResult:
@@ -228,6 +231,9 @@ class PageDependenciesCheckContainer(Container):
             return
         self.btn_continue.disabled = False
 
+        # If no_auto_checks is False - auto continue to the next page
+        self.btn_continue.press()
+
     
 class PageDependenciesCheck(Widget):
     """
@@ -241,6 +247,7 @@ class PageDependenciesCheck(Widget):
             ]
 
     def __init__(self,
+            no_auto_checks:bool|None,
             classes:str="PageDependenciesCheck",
             id:str="PageDependenciesCheck",
                  ) -> None:
@@ -250,12 +257,15 @@ class PageDependenciesCheck(Widget):
                 classes=classes,
                 id=id,
                 )
+
+        self.no_auto_checks=no_auto_checks
         
 
     def compose(self) -> ComposeResult:
         """ Here default (or other custom) Widgets are combined."""
 
         yield PageDependenciesCheckContainer(
+                no_auto_checks=self.no_auto_checks,
                 )
 
 

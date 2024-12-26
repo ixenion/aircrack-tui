@@ -84,6 +84,7 @@ class TUIMain(App):
                 no_auto_checks=self.no_auto_checks,
                 )
         page_dependencies_check = PageDependenciesCheck(
+                no_auto_checks=self.no_auto_checks,
                 )
         page_main = PageMain()
 
