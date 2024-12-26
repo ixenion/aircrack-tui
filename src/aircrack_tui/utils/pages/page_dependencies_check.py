@@ -219,7 +219,7 @@ class PageDependenciesCheckContainer(Container):
             else:
                 widget.status.update(str(False))
                 widget.status.styles.color = self.color_error
-                # all_deps_are_installed = False
+                all_deps_are_installed = False
             # Cool animation sleep timer :)
             await asyncio.sleep(0.15)
 
