@@ -6,7 +6,7 @@ $error_1: crimson 100%;
 
 
 /* Primary SCREEN */
-ContentSwitcher {
+#ContentSwitcher_Primary {
     height: 1fr;
     width: 100%;
 }
