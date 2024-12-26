@@ -54,7 +54,7 @@ def _version_callback(value: bool) -> None:
 # ------ #
 
 def main(
-        no_size_check_auto:bool|None,
+        no_auto_checks:bool|None,
         force_checks_skip:bool|None,
         ) -> None:
     """
@@ -64,7 +64,7 @@ def main(
         system("sudo echo [*] Requesting root access...")
 
     with TUIMain(
-            no_size_check_auto,
+            no_auto_checks,
             force_checks_skip,
             ) as tui_app:
         tui_app.run()
@@ -92,10 +92,10 @@ def control(
         callback=_version_callback,
         is_eager=True),
 
-        no_size_check_auto: Optional[bool] = typer.Option(
+        no_auto_checks: Optional[bool] = typer.Option(
             None,
-            "--no-size-check-auto",
-            help=f"Forse term size check to manual mode.",
+            "--no-auto-checks",
+            help=f"Make term size and dependencies to be checked with manual control (dont auto continue on check success).",
             is_eager=True,
             ),
 
@@ -113,7 +113,7 @@ def control(
 
     # asyncio.run(main(debug))
     main(
-            no_size_check_auto=no_size_check_auto,
+            no_auto_checks=no_auto_checks,
             force_checks_skip=force_checks_skip,
             )
 

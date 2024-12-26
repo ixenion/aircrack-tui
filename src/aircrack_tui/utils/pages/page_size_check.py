@@ -93,7 +93,7 @@ class PageSizeCheckContainer(Container):
     """
 
     def __init__(self,
-                 no_size_check_auto:bool|None=None,
+                 no_auto_checks:bool|None=None,
                  classes:str="PageSizeCheckContainer",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
@@ -101,7 +101,7 @@ class PageSizeCheckContainer(Container):
         super().__init__(classes=classes)
         self.term_max_width = 49
         self.term_min_width = 47
-        self.autocontinue:bool = False if no_size_check_auto == True else True
+        self.autocontinue:bool = False if no_auto_checks == True else True
         self.first_on_resize_check:bool = True
         self.autosize_pressed:bool = False
 
@@ -327,7 +327,7 @@ class PageSizeCheck(Widget):
             ]
 
     def __init__(self,
-                 no_size_check_auto:bool|None=None,
+                 no_auto_checks:bool|None=None,
                  classes:str="PageSizeCheck",
                  id:str="PageSizeCheck",
                  ) -> None:
@@ -337,14 +337,14 @@ class PageSizeCheck(Widget):
         self.border_subtitle = "bottom right"
         self.border_title = "top left"
 
-        self.no_size_check_auto:bool|None = no_size_check_auto
+        self.no_auto_checks:bool|None = no_auto_checks
 
 
     def compose(self) -> ComposeResult:
         """ Here default (or other custom) Widgets are combined."""
 
         yield PageSizeCheckContainer(
-                no_size_check_auto=self.no_size_check_auto,
+                no_auto_checks=self.no_auto_checks,
                 )
 
 

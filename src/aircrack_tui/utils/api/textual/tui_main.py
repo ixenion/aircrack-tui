@@ -59,7 +59,7 @@ class TUIMain(App):
 
 
     def __init__(self,
-                 no_size_check_auto:bool|None,
+                 no_auto_checks:bool|None,
                  force_checks_skip:bool|None,
                  ) -> None:
         # logger.main.info(f"\n\n\n")
@@ -69,7 +69,7 @@ class TUIMain(App):
         # Apply theme (light/dark) from config
         # self.dark = config["dark"]
 
-        self.no_size_check_auto:bool|None = no_size_check_auto
+        self.no_auto_checks:bool|None = no_auto_checks
         self.force_checks_skip:bool|None = force_checks_skip
         # Log it out
         # logger.main.info(f"Initialising done.")
@@ -81,7 +81,7 @@ class TUIMain(App):
         """ Create child widgets for the app."""
         
         page_size_check = PageSizeCheck(
-                no_size_check_auto=self.no_size_check_auto,
+                no_auto_checks=self.no_auto_checks,
                 )
         page_dependencies_check = PageDependenciesCheck(
                 )
