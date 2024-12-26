@@ -17,6 +17,10 @@ from pathlib        import Path
 # ------------- #
 # Local imports #
 
+from aircrack_tui.utils.api             import (
+        ShellCMD,
+        )
+
 from aircrack_tui.utils.simple_tasks    import (
         get_system,
         )
@@ -44,6 +48,15 @@ STYLES_PATH  = Path(
         )
 
 IS_ANDROID:bool = get_system()
+
+
+DEPENDENCIES:list[str] = [
+        "aircrack-ng",
+        "crunch",
+        "iwlist",
+        ]
+
+shell_cmd = ShellCMD()
 
 
 ########

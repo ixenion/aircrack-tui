@@ -22,7 +22,7 @@ from textual.widget     import Widget
 from textual.await_complete    import AwaitComplete
 from textual.widgets    import (
         Static, Tab, Rule, Label, LoadingIndicator,
-        Input, Button, Switch, Tabs
+        Input, Button, Switch, Tabs, ContentSwitcher,
         )
 
 # ------------- #
@@ -30,11 +30,8 @@ from textual.widgets    import (
 
 from aircrack_tui.utils.datastructures  import (
         STYLES_PATH,
-        IS_ANDROID,
-        )
-from aircrack_tui.utils.simple_tasks    import (
-        android_term_inc,
-        android_term_dec,
+        DEPENDENCIES,
+        shell_cmd,
         )
 
 
@@ -42,19 +39,20 @@ from aircrack_tui.utils.simple_tasks    import (
 # CLASSES #
 ###########
 
-class ParameterValue1(Container):
+class Dependency(Container):
     """
     To represent screen params and their values.
     """
 
     def __init__(self,
-                 parameter_name:str,
-                 classes:str="ParameterValue1",
+                 dep_name:str,
+                 classes:str="DependencyWidget1",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
         super().__init__(classes=classes)
-        self.parameter_name = parameter_name
+        self.dep_name = dep_name
+
 
 
     def compose(self) -> ComposeResult:
@@ -62,20 +60,20 @@ class ParameterValue1(Container):
         Here default (or other custom) Widgets are combined.
         """
 
-        self.parameter = Label(
-                renderable=self.parameter_name,
-                classes="Parameter_1",
+        self.dependency = Label(
+                renderable=self.dep_name,
+                classes="Dependency_1",
                 disabled=True,
                 )
 
-        self.value = Label(
+        self.status = Label(
                 renderable="Loading...",
-                classes="Value_1",
+                classes="Status_1",
                 disabled=True,
                 )
 
-        yield self.parameter
-        yield self.value
+        yield self.dependency
+        yield self.status
 
 
     def on_mount(self) -> None:
@@ -91,7 +89,7 @@ class PageDependenciesCheckContainer(Container):
     """
 
     def __init__(self,
-                 classes:str="PageDependenciesCheckContainer",
+            classes:str="PageDependenciesCheckContainer",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
@@ -125,6 +123,13 @@ class PageDependenciesCheckContainer(Container):
                 classes="PageDependenciesCheck_Btn_1",
                 )
 
+        self.deps_container = ScrollableContainer(
+                # Display all dependencies:
+                # *[Dependency(dep) for dep in DEPENDENCIES],
+                # *[Dependency(str(dep)) for dep in range(30)],
+                classes="DepsContainer",
+                )
+
         # Had to wrap button into Container because
         # Cant set align for button dirrectly.
         self.btns_container = Container(
@@ -136,6 +141,7 @@ class PageDependenciesCheckContainer(Container):
 
         yield self.title
         yield self.indicator
+        yield self.deps_container
         yield self.btns_container
 
 
@@ -152,6 +158,27 @@ class PageDependenciesCheckContainer(Container):
         # self.btn_continue.styles.align = ("center", "bottom")
         # self.btn_continue.styles.align_horizontal = "right"
         self.btn_continue.disabled = True
+        # self.notify("Hello, from Textual!", title="Welcome")
+
+
+    async def on_event(self, event) -> None:
+        """
+        Catch 'Show()' event to start checking dependencies.
+        """
+
+        match event.__repr__():
+            case "Show()":
+                # self.notify(f"{event}", title="Event")
+                loop = asyncio.get_event_loop()
+                check_dependencies_task = loop.create_task(
+                        self.check_dependencies_sequence(),
+                        )
+            case "Leave()":
+                ...
+            case "Enter()":
+                ...
+
+        await super().on_event(event)
 
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -171,9 +198,35 @@ class PageDependenciesCheckContainer(Container):
 
             case "PageDependenciesCheck_Btn_Continue":
                 content_switcher = the_app.query_one("#ContentSwitcher_Primary")
-                # if content_switcher.current == "PageSizeCheck":
-                #     content_switcher.current = "PageDependenciesCheck"
+                if content_switcher.current == "PageDependenciesCheck":
+                    content_switcher.current = "PageMain"
                 ...
+
+
+    async def check_dependencies_sequence(self) -> None:
+        """
+        Check does DEPENDENCIES are present and sends info to the display.
+        """
+
+        all_deps_are_installed:bool = True
+
+        for dep in DEPENDENCIES:
+            widget = Dependency(f"{dep}:")
+            await self.deps_container.mount(widget)
+            if await shell_cmd.util_presence_check(util_name=dep):
+                widget.status.update(str(True))
+                widget.status.styles.color = self.color_success
+            else:
+                widget.status.update(str(False))
+                widget.status.styles.color = self.color_error
+                # all_deps_are_installed = False
+            # Cool animation sleep timer :)
+            await asyncio.sleep(0.15)
+
+        # All deps are checked, now decide to continue or not.
+        if not all_deps_are_installed:
+            return
+        self.btn_continue.disabled = False
 
     
 class PageDependenciesCheck(Widget):
@@ -188,8 +241,8 @@ class PageDependenciesCheck(Widget):
             ]
 
     def __init__(self,
-                 classes:str="PageDependenciesCheck",
-                 id:str="PageDependenciesCheck",
+            classes:str="PageDependenciesCheck",
+            id:str="PageDependenciesCheck",
                  ) -> None:
         """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
 
@@ -197,12 +250,13 @@ class PageDependenciesCheck(Widget):
                 classes=classes,
                 id=id,
                 )
-
+        
 
     def compose(self) -> ComposeResult:
         """ Here default (or other custom) Widgets are combined."""
 
-        yield PageDependenciesCheckContainer()
+        yield PageDependenciesCheckContainer(
+                )
 
 
     def on_mount(self) -> None:

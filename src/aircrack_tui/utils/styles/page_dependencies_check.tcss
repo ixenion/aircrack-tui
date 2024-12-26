@@ -36,26 +36,43 @@ PageDependenciesCheck.PageDependenciesCheck {
             align: center top;
         }
 
-        /* PARAMETER-VALUE widgets */
-        .ParameterValue1 {
-            layout: horizontal;
+        /* DEPENDENCY ScrollableContainer */
+        .DepsContainer {
+            border: tall $color_2 10%;
+            margin: 0 4 0 4;
+            height: 2fr;
             width: 100%;
-            height: 1;
-            margin: 1 0 1 0;
             align: center top;
+            scrollbar-size: 0 2;
+            scrollbar-color: $color_1;
+            scrollbar-color-active: $color_1 80%;
+            scrollbar-color-hover: $color_1 80%;
+            scrollbar-background: $background;
+            scrollbar-background-hover: $background;
+            scrollbar-background-active: $background;
 
-            .Parameter_1 {
-                color: $color_1;
-                margin: 0 1 0 1;
-            /* text-align: center; */
+            /* Dependency widgets */
+            .DependencyWidget1 {
+                layout: horizontal;
+                width: auto;
+                height: 1;
+                margin: 1 0 1 0;
+                align: center top;
+
+                .Dependency_1 {
+                    color: $color_1;
+                    margin: 0 1 0 1;
+                /* text-align: center; */
+                }
+
+                .Status_1 {
+                    /*color: $error-lighten-1;*/
+                    color: $color_1;
+                    margin: 0 1 0 1;
+                /* text-align: center; */
+                }
+
             }
-
-            .Value_1 {
-                color: $error-lighten-1;
-                margin: 0 1 0 1;
-            /* text-align: center; */
-            }
-
         }
 
         /* Container for button */
