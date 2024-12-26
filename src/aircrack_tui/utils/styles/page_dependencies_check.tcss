@@ -38,7 +38,7 @@ PageDependenciesCheck.PageDependenciesCheck {
 
         /* DEPENDENCY ScrollableContainer */
         .DepsContainer {
-            border: tall $color_2 10%;
+            border: round $color_2 10%;
             margin: 0 4 0 4;
             height: 2fr;
             width: 100%;
