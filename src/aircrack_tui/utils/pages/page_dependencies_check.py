@@ -232,7 +232,8 @@ class PageDependenciesCheckContainer(Container):
         self.btn_continue.disabled = False
 
         # If no_auto_checks is False - auto continue to the next page
-        self.btn_continue.press()
+        if not self.no_auto_checks:
+            self.btn_continue.press()
 
     
 class PageDependenciesCheck(Widget):
