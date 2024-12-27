@@ -1,0 +1,50 @@
+/* CONSTANTS */
+$color_1: $accent-lighten-2;
+$color_2: $foreground 30%;
+$color_3: $secondary;
+$error_1: crimson 100%;
+
+
+/* WIDGET MENU */
+Container.WidgetMenu.Box {
+    display: block;
+    margin: 1 5 0 5;
+    height: 50%;
+    width: 100%;
+    align-horizontal: center;
+
+    /* GRID LAYOUT */
+    .WidgetMenu.CustomGridVertical {
+        scrollbar-size: 0 2;
+        scrollbar-color: $color_1;
+        scrollbar-color-active: $color_1 80%;
+        scrollbar-color-hover: $color_1 80%;
+        scrollbar-background: $background;
+        scrollbar-background-hover: $background;
+        scrollbar-background-active: $background;
+
+        .WidgetMenu.CustomGridHorizontal {
+            height: 4;
+            align-horizontal: center;
+
+            /* BUTTONS */
+            .WidgetMenu.Btn {
+                margin: 0 1 1 0;
+                height: 3;
+                width: 14;
+                background: $color_1;
+                color: $background;
+                border: blank $color_1;
+                border-top: none;
+                border-bottom: none;
+                text-style: bold;
+
+                &:disabled {
+                    background: $color_2 50%;
+                }
+            }
+
+        }
+    }
+
+}

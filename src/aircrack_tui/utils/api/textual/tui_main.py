@@ -60,6 +60,7 @@ class TUIMain(App):
             Path(STYLES_PATH, 'page_main', 'page_main.tcss'),
             # Main page widgets tcss
             Path(STYLES_PATH, 'page_main', 'widget_interface.tcss'),
+            Path(STYLES_PATH, 'page_main', 'widget_menu.tcss'),
             ]
 
 

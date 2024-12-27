@@ -27,7 +27,10 @@ from textual.widgets    import (
 # ------------- #
 # Local imports #
 
-from aircrack_tui.utils.pages.page_main.widget_interface import WidgetInterface
+from aircrack_tui.utils.pages.page_main import (
+        WidgetInterface,
+        WidgetMenu,
+        )
 
 from aircrack_tui.utils.datastructures  import (
         STYLES_PATH,
@@ -55,8 +58,10 @@ class PageMainContainer(Container):
         """ Here default (or other custom) Widgets are combined."""
 
         self.widget_interface = WidgetInterface()
+        self.widget_menu = WidgetMenu()
         
         yield self.widget_interface
+        yield self.widget_menu
 
 
     def on_resize(self, event:Resize):
