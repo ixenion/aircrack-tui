@@ -7,7 +7,7 @@ $error_1: crimson 100%;
 
 /* WIDGET INTERFACE */
 Container.WidgetInterface.Box {
-    border: round $color_2 10%;
+    border: round $color_2 30%;
     display: block;
     margin: 1 2 0 2;
     height: 25%;
