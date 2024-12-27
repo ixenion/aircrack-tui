@@ -51,10 +51,15 @@ class TUIMain(App):
     #         ("up", "focus_previous", "Prev"),
     #         ]
     CSS_PATH = [
+            # ContentSwitcher tcss
             Path(STYLES_PATH, 'page_primary.tcss'),
+            # Checkers tcss'
             Path(STYLES_PATH, 'page_size_check.tcss'),
             Path(STYLES_PATH, 'page_dependencies_check.tcss'),
-            Path(STYLES_PATH, 'page_main.tcss'),
+            # Main page tcss
+            Path(STYLES_PATH, 'page_main', 'page_main.tcss'),
+            # Main page widgets tcss
+            Path(STYLES_PATH, 'page_main', 'widget_interface.tcss'),
             ]
 
 
