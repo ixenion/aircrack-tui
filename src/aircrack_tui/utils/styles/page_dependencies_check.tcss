@@ -97,6 +97,9 @@ PageDependenciesCheck.PageDependenciesCheck {
                 &.-hidden {
                     display: none;
                 }
+                &:disabled {
+                    background: $color_2 50%;
+                }
             }
 
         }

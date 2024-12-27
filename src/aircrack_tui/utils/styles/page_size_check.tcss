@@ -92,43 +92,11 @@ PageSizeCheck.PageSizeCheck {
                 &.-hidden {
                     display: none;
                 }
+
+                &:disabled {
+                    background: $color_2 50%;
+                }
             }
-
-            /* Buttons Increase Decrease term forn size */
-            #PageSizeCheck_Btn_TermIncrease {
-                margin: 1 0 1 0;
-                height: 3;
-                width: 14;
-                /*align: center bottom;*/
-                background: $success;
-                color: $background;
-                border: blank $color_1;
-                border-top: none;
-                border-bottom: none;
-                text-style: bold;
-
-                    &.-hidden {
-                        display: none;
-                    }
-                }
-            #PageSizeCheck_Btn_TermDecrease {
-                margin: 1 0 1 0;
-                height: 3;
-                width: 14;
-                /*align: center bottom;*/
-                background: $error-lighten-1;
-                color: $background;
-                border: blank $color_1;
-                border-top: none;
-                border-bottom: none;
-                text-style: bold;
-
-                    &.-hidden {
-                        display: none;
-                    }
-                }
-
-
 
         }
 
