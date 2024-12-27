@@ -277,9 +277,9 @@ class PageSizeCheckContainer(Container):
 
         # IF autosize btn pressed
         if self.autosize_pressed:
-            if width > self.term_max_width and self.autocontinue:
+            if width > self.term_max_width:
                 android_term_inc()
-            elif width < self.term_min_width and self.autocontinue:
+            elif width < self.term_min_width:
                 android_term_dec()
 
 
