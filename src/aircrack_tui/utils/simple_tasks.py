@@ -35,15 +35,11 @@ def get_system() -> bool:
     
     # Check if the command was successful
     if result.returncode == 0:
-        # print("Command executed successfully.")
-        # print("Output:", result.stdout)
         response = result.stdout
         if "Android" in response:
             return True
         return False
     else:
-        # print(f"Command failed with exit code {result.returncode}.")
-        # print("Error:", result.stderr)
         return False
 
 

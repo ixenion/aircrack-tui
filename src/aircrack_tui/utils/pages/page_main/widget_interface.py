@@ -35,7 +35,7 @@ class Parameter(Horizontal):
                  parameter_name:str,
                  classes:str="WidgetInterface Parameter",
                  ) -> None:
-        """ Set 'classes' and 'id' attribute to the widget."""
+        """ Set 'classes' attribute to the widget."""
 
         super().__init__(classes=classes)
 
@@ -43,7 +43,7 @@ class Parameter(Horizontal):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
 
         self.parameter_label = Label(
                 renderable=self.parameter_name,
@@ -63,7 +63,7 @@ class Parameter(Horizontal):
 
 class ParametersList(Vertical):
     """
-    Contains two buttons: select - select interface and
+    Contains two buttons: select - selects interface and
     settings - setup selected interface.
     """
 
@@ -76,7 +76,7 @@ class ParametersList(Vertical):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
         
         self.iface_name     = Parameter(parameter_name="Name:")
         self.iface_mode     = Parameter(parameter_name="Mode:")
@@ -95,7 +95,6 @@ class ControlPanel(Vertical):
     settings - setup selected interface.
     """
 
-    DEFAULT_CSS = ""
 
     def __init__(self,
                  classes:str="WidgetInterface ControlPanel",
@@ -106,7 +105,7 @@ class ControlPanel(Vertical):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
 
         self.btn_select = Button(
                 label="SELECT",
@@ -126,10 +125,11 @@ class ControlPanel(Vertical):
 class WidgetInterface(Container):
     """
     Contains params such as:
-    - iface name,
-    - iface current mode (managed, monitor, etc),
-    - iface current channel,
-    - MAC.
+        - iface name,
+        - iface current mode (managed, monitor, etc),
+        - iface current channel,
+        - iface MAC.
+
     Also two buttons: select (different) interface and settings - setup
     currently selected.
     """
@@ -138,7 +138,7 @@ class WidgetInterface(Container):
     def __init__(self,
             classes:str="WidgetInterface Box",
             ) -> None:
-        """ Set 'classes' and 'id' attribute to the widget."""
+        """ Set 'classes' attribute to the widget."""
 
         super().__init__(classes=classes)
 
@@ -146,7 +146,7 @@ class WidgetInterface(Container):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
 
         self.parameters_list:ParametersList = ParametersList()
         self.control_panel:ControlPanel = ControlPanel()

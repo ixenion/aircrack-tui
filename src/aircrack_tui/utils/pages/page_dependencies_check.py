@@ -2,34 +2,27 @@
 # System imports #
 
 import asyncio
-from functools          import partial
 from pathlib            import Path
-from shutil             import get_terminal_size
-from time               import sleep
 
 
 # ------------------- #
 # Third-party imports #
 
 from textual.app        import App, ComposeResult
-from textual.events     import Resize
 from textual.color import Color
 from textual.containers import (
-        Container, ScrollableContainer, Vertical,
-        Horizontal, VerticalScroll,
+        Container, ScrollableContainer,
         )
 from textual.widget     import Widget
-from textual.await_complete    import AwaitComplete
 from textual.widgets    import (
-        Static, Tab, Rule, Label, LoadingIndicator,
-        Input, Button, Switch, Tabs, ContentSwitcher,
+        Label, LoadingIndicator,
+        Button, ContentSwitcher,
         )
 
 # ------------- #
 # Local imports #
 
 from aircrack_tui.utils.datastructures  import (
-        STYLES_PATH,
         DEPENDENCIES,
         shell_cmd,
         )
@@ -41,23 +34,22 @@ from aircrack_tui.utils.datastructures  import (
 
 class Dependency(Container):
     """
-    To represent screen params and their values.
+    To represent dependency name and its status (installed or not).
     """
 
     def __init__(self,
                  dep_name:str,
                  classes:str="DependencyWidget1",
                  ) -> None:
-        """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
+        """ Set 'classes' to the Container."""
 
         super().__init__(classes=classes)
         self.dep_name = dep_name
 
 
-
     def compose(self) -> ComposeResult:
         """
-        Here default (or other custom) Widgets are combined.
+        Here components are combined.
         """
 
         self.dependency = Label(
@@ -78,7 +70,7 @@ class Dependency(Container):
 
     def on_mount(self) -> None:
         """
-        Do staff when app initialising
+        Do staff when app initialising.
         """
 
         ...
@@ -86,21 +78,27 @@ class Dependency(Container):
 
 class PageDependenciesCheckContainer(Container):
     """
+    Main Container for Page with Dependencies status.
     """
 
     def __init__(self,
             no_auto_checks:bool|None,
             classes:str="PageDependenciesCheckContainer",
                  ) -> None:
-        """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
+        """ Set 'classes' to the Container."""
 
         super().__init__(classes=classes)
 
         self.no_auto_checks:bool|None=no_auto_checks
 
+        # Gather colors
+        self.color_text     = Color(255, 205, 77)
+        self.color_success  = Color(78, 191, 113)
+        self.color_error    = Color(208, 80, 109)
+
 
     def compose(self) -> ComposeResult:
-        """ Here default (or other custom) Widgets are combined."""
+        """ Here components are combined."""
 
         self.title = Label(
                 renderable="Checking dependencies",
@@ -127,9 +125,6 @@ class PageDependenciesCheckContainer(Container):
                 )
 
         self.deps_container = ScrollableContainer(
-                # Display all dependencies:
-                # *[Dependency(dep) for dep in DEPENDENCIES],
-                # *[Dependency(str(dep)) for dep in range(30)],
                 classes="DepsContainer",
                 )
 
@@ -153,24 +148,17 @@ class PageDependenciesCheckContainer(Container):
         Called on container creation.
         """
 
-        # Gather colors
-        self.color_text     = Color(255, 205, 77)
-        self.color_success  = Color(78, 191, 113)
-        self.color_error    = Color(208, 80, 109)
-
-        # self.btn_continue.styles.align = ("center", "bottom")
-        # self.btn_continue.styles.align_horizontal = "right"
         self.btn_continue.disabled = True
-        # self.notify("Hello, from Textual!", title="Welcome")
 
 
     async def on_event(self, event) -> None:
         """
-        Catch 'Show()' event to start checking dependencies.
+        Catch different events.
         """
 
         match event.__repr__():
             case "Show()":
+                # Catch 'Show()' event to start checking dependencies.
                 # self.notify(f"{event}", title="Event")
                 loop = asyncio.get_event_loop()
                 check_dependencies_task = loop.create_task(
@@ -181,34 +169,33 @@ class PageDependenciesCheckContainer(Container):
             case "Enter()":
                 ...
 
+        # Propagate event:
         await super().on_event(event)
 
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """
-        Handle button pressed which (buttons) are defined
-        inside that class.
+        Handle button pressed.
         """
 
+        # PageDependencyCheckContainer -> PageDependencyCheck -> \
+        # ContentSwitcher_Primary -> Screen -> TUIMain
         the_app:App = self.parent.parent.parent.parent
         
         match event.button.id:
 
             case "PageDependenciesCheck_Btn_Exit":
-                # PageSizeCheckContainer -> PageSizeCheck -> \
-                # ContentSwitcher_Primary -> Screen -> TUIMain
                 the_app.exit(str(event.button))
 
             case "PageDependenciesCheck_Btn_Continue":
-                content_switcher = the_app.query_one("#ContentSwitcher_Primary")
+                content_switcher:ContentSwitcher = the_app.query_one("#ContentSwitcher_Primary")
                 if content_switcher.current == "PageDependenciesCheck":
                     content_switcher.current = "PageMain"
-                ...
 
 
     async def check_dependencies_sequence(self) -> None:
         """
-        Check does DEPENDENCIES are present and sends info to the display.
+        Checks if DEPENDENCIES are present and sends info to the display.
         """
 
         all_deps_are_installed:bool = True
@@ -231,28 +218,22 @@ class PageDependenciesCheckContainer(Container):
             return
         self.btn_continue.disabled = False
 
-        # If no_auto_checks is False - auto continue to the next page
+        # If self.no_auto_checks is False - auto continue to the next page
         if not self.no_auto_checks:
             self.btn_continue.press()
 
     
 class PageDependenciesCheck(Widget):
     """
+    Main Contanier Page for dependency checking.
     """
-
-    BINDINGS = [
-        # ("r", "remove_stopwatch", "Remove"),
-    ]
-    CSS_PATH = [
-            Path(STYLES_PATH, "page_check_dependencies.tcss"),
-            ]
 
     def __init__(self,
             no_auto_checks:bool|None,
             classes:str="PageDependenciesCheck",
             id:str="PageDependenciesCheck",
                  ) -> None:
-        """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
+        """ Set 'classes' and 'id' attributes to the Container."""
 
         super().__init__(
                 classes=classes,
@@ -263,7 +244,7 @@ class PageDependenciesCheck(Widget):
         
 
     def compose(self) -> ComposeResult:
-        """ Here default (or other custom) Widgets are combined."""
+        """ Here components are combined."""
 
         yield PageDependenciesCheckContainer(
                 no_auto_checks=self.no_auto_checks,
@@ -272,7 +253,7 @@ class PageDependenciesCheck(Widget):
 
     def on_mount(self) -> None:
         """
+        Do staff when app initialising.
         """
 
-        # self.add_class("-hidden")
         self.remove_class("-hidden")

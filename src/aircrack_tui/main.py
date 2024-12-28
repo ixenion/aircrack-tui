@@ -3,11 +3,8 @@
 # ----------------#
 
 import asyncio
-from dataclasses            import asdict
-from os                     import geteuid, system
-from pprint                 import pprint
-from time                   import time, gmtime, strftime
-from typing                 import AsyncGenerator, Optional
+from os                     import system
+from typing                 import Optional
 
 
 # ------------------- #
@@ -27,10 +24,6 @@ from aircrack_tui.utils.api     import (
         )
 from aircrack_tui.utils.datastructures  import (
         IS_ANDROID,
-        )
-from aircrack_tui.utils.simple_tasks    import (
-        is_root,
-        android_hide_keyboard,
         )
 
 
@@ -58,9 +51,13 @@ def main(
         force_checks_skip:bool|None,
         ) -> None:
     """
+    Main app entry point.
     """
 
     if IS_ANDROID:
+        # Have to call some root commands, to raise root granting prompt
+        # on android before textual app starts.
+        # Otherwise there will be difficulties with soft keyboard hiding.
         system("sudo echo [*] Requesting root access...")
 
     with TUIMain(
@@ -106,12 +103,11 @@ def control(
             is_eager=True,
             )
         ):
-
     """
+    For proper help displaying.
     """
 
 
-    # asyncio.run(main(debug))
     main(
             no_auto_checks=no_auto_checks,
             force_checks_skip=force_checks_skip,
@@ -120,8 +116,10 @@ def control(
 
 def app_entry_point():
     """
-        To run dirrectly from console (uses pdm build engine).
-        Example:
+    console entry point to run dirrectly from console
+    (uses pdm build engine).
+    Example:
+        $ aircrack-tui --help
     """
 
     app()

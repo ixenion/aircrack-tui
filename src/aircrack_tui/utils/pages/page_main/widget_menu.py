@@ -15,22 +15,16 @@ from time               import sleep
 from textual.app        import App, ComposeResult
 from textual.events     import Resize
 from textual.containers import (
-        Container, ScrollableContainer, Vertical,
-        Horizontal, VerticalScroll, Grid
+        Container,
+        Horizontal, VerticalScroll,
         )
-from textual.widget     import Widget
-from textual.await_complete    import AwaitComplete
 from textual.widgets    import (
-        Static, Tab, Rule, Label, LoadingIndicator,
-        Input, Button, Switch, Tabs
+        Button,
         )
 
 # ------------- #
 # Local imports #
 
-from aircrack_tui.utils.datastructures  import (
-        STYLES_PATH,
-        )
 
 
 ###########
@@ -48,7 +42,7 @@ class WidgetMenu(Container):
     def __init__(self,
             classes:str="WidgetMenu Box",
             ) -> None:
-        """ Set 'classes' and 'id' attribute to the widget."""
+        """ Set 'classes' attribute to the widget."""
 
         super().__init__(classes=classes)
 
@@ -56,7 +50,7 @@ class WidgetMenu(Container):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
 
         self.btn_placeholder_1 = Button(
                 label="P-HOLDER",
@@ -152,12 +146,6 @@ class WidgetMenu(Container):
         with VerticalScroll(
                 classes="WidgetMenu CustomGridVertical",
                 ):
-            # for row in range( ceil(len(self.menu_btns)/2) ):
-            #     temp = Horizontal(
-            #             self.menu_btns[row*2],
-            #             self.menu_btns[row*2+1],
-            #             )
-            #     yield temp
             for row in range( ceil(len(self.menu_btns)/2) ):
                 with Horizontal(
                     classes="WidgetMenu CustomGridHorizontal",
@@ -176,15 +164,14 @@ class WidgetMenu(Container):
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """
-        Handle button pressed which (buttons) are defined
-        inside that class.
+        Handle button pressed.
         """
 
+        # WidgetMenu -> PageMain -> \
+        # ContentSwitcher_Primary -> Screen -> TUIMain
         the_app:App = self.parent.parent.parent.parent.parent
         
         match event.button.id:
 
             case "WidgetMenu_Btn_Exit":
-                # PageSizeCheckContainer -> PageSizeCheck -> \
-                # ContentSwitcher_Primary -> Screen -> TUIMain
                 the_app.exit(str(event.button))

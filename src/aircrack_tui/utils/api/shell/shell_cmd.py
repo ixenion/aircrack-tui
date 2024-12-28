@@ -45,7 +45,7 @@ class ShellCMD:
 
     async def util_presence_check(self, util_name:str) -> bool:
         """
-        Return True if util_name present in the sys,
+        Return True if util_name present in the system,
         False otherwise.
         """
         

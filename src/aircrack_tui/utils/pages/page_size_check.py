@@ -2,10 +2,8 @@
 # System imports #
 
 import asyncio
-from functools          import partial
 from pathlib            import Path
 from shutil             import get_terminal_size
-from time               import sleep
 
 
 # ------------------- #
@@ -15,14 +13,13 @@ from textual.app        import App, ComposeResult
 from textual.events     import Resize
 from textual.color import Color
 from textual.containers import (
-        Container, ScrollableContainer, Vertical,
-        Horizontal, VerticalScroll,
+        Container,
         )
 from textual.widget     import Widget
 from textual.await_complete    import AwaitComplete
 from textual.widgets    import (
-        Static, Tab, Rule, Label, LoadingIndicator,
-        Input, Button, Switch, Tabs
+        Label, LoadingIndicator,
+        Button, ContentSwitcher,
         )
 
 # ------------- #
@@ -53,7 +50,7 @@ class ParameterValue1(Container):
                  parameter_name:str,
                  classes:str="ParameterValue1",
                  ) -> None:
-        """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
+        """ Set 'classes' attribute to the Container."""
 
         super().__init__(classes=classes)
         self.parameter_name = parameter_name
@@ -61,7 +58,7 @@ class ParameterValue1(Container):
 
     def compose(self) -> ComposeResult:
         """
-        Here default (or other custom) Widgets are combined.
+        Here components are combined.
         """
 
         self.parameter = Label(
@@ -90,13 +87,15 @@ class ParameterValue1(Container):
 
 class PageSizeCheckContainer(Container):
     """
+    Page size check main container cintaining all info
+    to check screen size.
     """
 
     def __init__(self,
                  no_auto_checks:bool|None=None,
                  classes:str="PageSizeCheckContainer",
                  ) -> None:
-        """ Set 'classes' and 'id' attribute to the page - 'Common' class."""
+        """ Set 'classes' to the Container."""
 
         super().__init__(classes=classes)
         self.term_max_width = 49
@@ -105,9 +104,14 @@ class PageSizeCheckContainer(Container):
         self.first_on_resize_check:bool = True
         self.autosize_pressed:bool = False
 
+        # Gather colors
+        self.color_text     = Color(255, 205, 77)
+        self.color_success  = Color(78, 191, 113)
+        self.color_error    = Color(208, 80, 109)
+
 
     def compose(self) -> ComposeResult:
-        """ Here default (or other custom) Widgets are combined."""
+        """ Here components are combined."""
 
         self.title = Label(
                 renderable="Checking term window size",
@@ -178,20 +182,6 @@ class PageSizeCheckContainer(Container):
         yield self.hint_2
         yield self.btns_container
 
-    def on_mount(self):
-        """
-        Called on container creation.
-        """
-
-        # Gather colors
-        self.color_text     = Color(255, 205, 77)
-        self.color_success  = Color(78, 191, 113)
-        self.color_error    = Color(208, 80, 109)
-
-        # self.btn_continue.styles.align = ("center", "bottom")
-        # self.btn_continue.styles.align_horizontal = "right"
-
-
 
     def on_resize(self, event:Resize):
         """
@@ -237,7 +227,7 @@ class PageSizeCheckContainer(Container):
 
         # Gather parameters' colors
         param1_color = self.parameter_1.value.styles.color
-        param2_color = self.parameter_2.value.styles.color
+        # param2_color = self.parameter_2.value.styles.color
         param3_color = self.parameter_3.value.styles.color
         
         # Show hint for Width
@@ -254,13 +244,12 @@ class PageSizeCheckContainer(Container):
 
         # Show btn_continue
         if param1_color == self.color_error or param3_color == self.color_error:
-            # self.btn_continue.add_class("-hidden")
             self.btn_continue.disabled = True
         else:
-            # self.btn_continue.remove_class("-hidden")
+            self.autosize_pressed = False
             self.btn_continue.disabled = False
 
-        # Show BTN Increase | Decrease
+        # Show BTN Autoresize
         if (width < self.term_min_width or width > self.term_max_width) \
                 and IS_ANDROID:
             # Terminal font size to big
@@ -293,13 +282,13 @@ class PageSizeCheckContainer(Container):
         inside that class.
         """
 
+        # PageSizeCheckContainer -> PageSizeCheck -> \
+        # ContentSwitcher_Primary -> Screen -> TUIMain
         the_app:App = self.parent.parent.parent.parent
         
         match event.button.id:
 
             case "PageSizeCheck_Btn_Exit":
-                # PageSizeCheckContainer -> PageSizeCheck -> \
-                # ContentSwitcher_Primary -> Screen -> TUIMain
                 the_app.exit(str(event.button))
 
             case "PageSizeCheck_Btn_TermAutosize":
@@ -308,7 +297,7 @@ class PageSizeCheckContainer(Container):
                 android_term_inc()
 
             case "PageSizeCheck_Btn_Continue":
-                content_switcher = the_app.query_one("#ContentSwitcher_Primary")
+                content_switcher:ContentSwitcher = the_app.query_one("#ContentSwitcher_Primary")
                 if content_switcher.current == "PageSizeCheck":
                     content_switcher.current = "PageDependenciesCheck"
 
@@ -317,14 +306,8 @@ class PageSizeCheckContainer(Container):
     
 class PageSizeCheck(Widget):
     """
+    Main Container page for size check params.
     """
-
-    BINDINGS = [
-        # ("r", "remove_stopwatch", "Remove"),
-    ]
-    CSS_PATH = [
-            Path(STYLES_PATH, "page_check_size.tcss"),
-            ]
 
     def __init__(self,
                  no_auto_checks:bool|None=None,
@@ -341,7 +324,7 @@ class PageSizeCheck(Widget):
 
 
     def compose(self) -> ComposeResult:
-        """ Here default (or other custom) Widgets are combined."""
+        """ Here components are combined."""
 
         yield PageSizeCheckContainer(
                 no_auto_checks=self.no_auto_checks,
@@ -350,6 +333,7 @@ class PageSizeCheck(Widget):
 
     def on_mount(self) -> None:
         """
+        Do staff when app initialising.
         """
 
         self.remove_class("-hidden")
