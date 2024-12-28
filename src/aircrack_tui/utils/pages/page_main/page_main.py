@@ -21,6 +21,7 @@ from textual.widget     import Widget
 from aircrack_tui.utils.pages.page_main import (
         WidgetInterface,
         WidgetMenu,
+        WidgetTarget,
         )
 
 
@@ -46,9 +47,11 @@ class PageMainContainer(Container):
 
         self.widget_interface = WidgetInterface()
         self.widget_menu = WidgetMenu()
+        self.widget_target = WidgetTarget()
         
         yield self.widget_interface
         yield self.widget_menu
+        yield self.widget_target
 
 
     def on_resize(self, event:Resize):

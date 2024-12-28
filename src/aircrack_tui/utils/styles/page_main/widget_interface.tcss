@@ -11,6 +11,7 @@ Container.WidgetInterface.Box {
     display: block;
     margin: 1 2 0 2;
     height: 25%;
+    min-height: 11;
 
     /* PARAMETERS AND CONTROL BUTTONS */
     .WidgetInterface.Layout {

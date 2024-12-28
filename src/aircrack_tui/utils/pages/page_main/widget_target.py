@@ -10,10 +10,10 @@ import asyncio
 from textual.app        import ComposeResult
 from textual.containers import (
         Container, Vertical,
-        Horizontal,
+        Horizontal, Grid
         )
 from textual.widgets    import (
-        Label,
+        Label, Sparkline,
         Button,
         )
 
@@ -33,9 +33,9 @@ class Parameter(Horizontal):
 
     def __init__(self,
                  parameter_name:str,
-                 classes:str="WidgetInterface Parameter",
+                 classes:str="WidgetTarget Parameter",
                  ) -> None:
-        """ Set 'classes' and 'id' attribute to the widget."""
+        """ Set 'classes' attribute to the widget."""
 
         super().__init__(classes=classes)
 
@@ -43,17 +43,17 @@ class Parameter(Horizontal):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
 
         self.parameter_label = Label(
                 renderable=self.parameter_name,
-                classes="WidgetInterface ParameterName",
+                classes="WidgetTarget ParameterName",
                 disabled=True,
                 )
 
         self.parameter_value = Label(
                 renderable="None",
-                classes="WidgetInterface ParameterValue",
+                classes="WidgetTarget ParameterValue",
                 disabled=True,
                 )
 
@@ -61,14 +61,13 @@ class Parameter(Horizontal):
         yield self.parameter_value
 
 
-class ParametersList(Vertical):
+class ParametersList(Grid):
     """
-    Contains two buttons: select - select interface and
-    settings - setup selected interface.
+    Contains parameters list.
     """
 
     def __init__(self,
-                 classes:str="WidgetInterface ParametersList",
+                 classes:str="WidgetTarget ParametersList",
                  ) -> None:
         """ Set 'classes' attribute to the widget."""
 
@@ -76,29 +75,37 @@ class ParametersList(Vertical):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
         
-        self.iface_name     = Parameter(parameter_name="Name:")
-        self.iface_mode     = Parameter(parameter_name="Mode:")
-        self.iface_channel  = Parameter(parameter_name="Channel:")
-        self.iface_mac      = Parameter(parameter_name="MAC:")
+        self.target_name    = Parameter(parameter_name="Name:")
+        self.target_mac     = Parameter(parameter_name="MAC:")
+        self.target_clients = Parameter(parameter_name="Clients:")
+        self.target_channel = Parameter(parameter_name="Channel:")
 
-        yield self.iface_name
-        yield self.iface_mode
-        yield self.iface_channel
-        yield self.iface_mac
+        # with Horizontal(
+        #         classes="WidgetTarget NameMac",):
+        #     yield self.target_name
+        #     yield self.target_channel
+        # with Horizontal(
+        #         classes="WidgetTarget ClCh",):
+        #     yield self.target_mac
+        #     yield self.target_clients
+
+        yield self.target_name
+        yield self.target_channel
+
+        yield self.target_mac
+        yield self.target_clients
 
 
-class ControlPanel(Vertical):
+class PowerWidget(Horizontal):
     """
-    Contains two buttons: select - select interface and
-    settings - setup selected interface.
+    Contais line graph (textual.sparkline) and current number.
     """
 
-    DEFAULT_CSS = ""
 
     def __init__(self,
-                 classes:str="WidgetInterface ControlPanel",
+                 classes:str="WidgetTarget Power",
                  ) -> None:
         """ Set 'classes' attribute to the widget."""
 
@@ -106,56 +113,94 @@ class ControlPanel(Vertical):
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
+
+        # Dummy data
+        data:list[int] = [-70, -70, -65, -68, -80, -60, -50, -55, -60, -70]
+
+        self.power_graph = Sparkline(
+                data,  
+                summary_function=max,
+                classes="WidgetTarget PowerGraph",
+                )
+        self.power_label = Label(
+                renderable="None",
+                classes="WidgetTarget PowerLabel",
+                )
+
+        yield self.power_graph
+        yield self.power_label
+
+
+
+class ControlPanel(Grid):
+    """
+    Contains two buttons: select - select target and
+    specs - shows characteristics ot selected target.
+    """
+
+
+    def __init__(self,
+                 classes:str="WidgetTarget ControlPanel",
+                 ) -> None:
+        """ Set 'classes' attribute to the widget."""
+
+        super().__init__(classes=classes)
+
+
+    def compose(self) -> ComposeResult:
+        """ Here components are combined."""
 
         self.btn_select = Button(
                 label="SELECT",
-                classes="WidgetInterface BtnSelect",
+                classes="WidgetTarget BtnsControl",
                 disabled=False,
                 )
-        self.btn_settings = Button(
-                label="SETTINGS",
-                classes="WidgetInterface BtnSettings",
+        self.btn_specs = Button(
+                label="SPECS",
+                classes="WidgetTarget BtnsControl",
                 disabled=True,
                 )
 
         yield self.btn_select
-        yield self.btn_settings
+        yield self.btn_specs
             
     
-class WidgetInterface(Container):
+class WidgetTarget(Vertical):
     """
     Contains params such as:
-    - iface name,
-    - iface current mode (managed, monitor, etc),
-    - iface current channel,
-    - MAC.
-    Also two buttons: select (different) interface and settings - setup
-    currently selected.
+        - target name,
+        - target MAC.
+        - target current channel,
+        - target current clients active
+
+    Then a graph with label to track RX power.
+
+    And two buttons: select between (different) targets and
+    specs - show detailed specs for the target.
     """
 
 
     def __init__(self,
-            classes:str="WidgetInterface Box",
+            classes:str="WidgetTarget Box",
             ) -> None:
-        """ Set 'classes' and 'id' attribute to the widget."""
+        """ Set 'classes' attribute to the widget."""
 
         super().__init__(classes=classes)
 
-        self.border_title = "Interface"
+        self.border_title = "Target"
 
 
     def compose(self) -> ComposeResult:
-        """ Here subparts are combined."""
+        """ Here components are combined."""
 
         self.parameters_list:ParametersList = ParametersList()
+        self.power_panel:PowerWidget = PowerWidget()
         self.control_panel:ControlPanel = ControlPanel()
 
-        with Horizontal(
-                classes="WidgetInterface Layout",
-                ):
-            yield self.parameters_list
-            yield self.control_panel
+        yield self.parameters_list
+        yield self.power_panel
+        yield self.control_panel
 
 
     def on_mount(self) -> None:
