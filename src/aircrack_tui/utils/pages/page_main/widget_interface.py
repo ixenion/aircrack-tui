@@ -63,8 +63,7 @@ class Parameter(Horizontal):
 
 class ParametersList(Vertical):
     """
-    Contains two buttons: select - selects interface and
-    settings - setup selected interface.
+    Contains All parameters list with corresponding values.
     """
 
     def __init__(self,
