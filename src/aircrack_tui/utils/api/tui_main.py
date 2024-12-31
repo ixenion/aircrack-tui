@@ -33,6 +33,10 @@ from aircrack_tui.utils.pages           import (
         PageDependenciesCheck,
         )
 
+from aircrack_tui.utils.pages.page_main.interface.interface_select import (
+        PageInterfaceSelect,
+        )
+
 
 ###########
 # CLASSES #
@@ -62,6 +66,8 @@ class TUIMain(App):
             Path(STYLES_PATH, 'page_main', 'widget_interface.tcss'),
             Path(STYLES_PATH, 'page_main', 'widget_menu.tcss'),
             Path(STYLES_PATH, 'page_main', 'widget_target.tcss'),
+            # Main page interface widget buttons
+            Path(STYLES_PATH, 'page_main', 'interface', 'interface_select.tcss'),
             ]
 
 
@@ -87,26 +93,54 @@ class TUIMain(App):
     def compose(self) -> ComposeResult:
         """ Create child widgets for the app."""
         
+        # CHECKS PAGES
         page_size_check = PageSizeCheck(
                 no_auto_checks=self.no_auto_checks,
                 )
         page_dependencies_check = PageDependenciesCheck(
                 no_auto_checks=self.no_auto_checks,
                 )
+        # MAIN PAGE WITH MENU
         page_main = PageMain()
+
+        # MAIN PAGE INTERFACE WIDGET
+        interface_select = PageInterfaceSelect()
 
         if self.force_checks_skip == True:
             initial = "PageMain"
         else:
             initial = "PageSizeCheck"
 
-        with ContentSwitcher(
+        self.main_content_switcher = ContentSwitcher(
                 id="ContentSwitcher_Primary",
                 initial=initial,
-                ):  
+                )
+        with self.main_content_switcher:
             yield page_size_check
             yield page_dependencies_check
             yield page_main
+            # Main page interface select
+            yield interface_select
+
+
+    def on_button_pressed(self, event:Button.Pressed) -> None:
+        """
+        Handle buttons pressed
+        """
+
+        match event.button.id:
+
+            # INTERFACE WIDGET BUTTONS
+            case "WidgetInterface_BtnSelect":
+                # self.notify(f"btn select", title="Event")
+                self.main_content_switcher.current = "InterfaceSelect_Box"
+
+            case "WidgetInterface_BtnSettings":
+                self.notify(f"btn settings", title="Event")
+
+            # INTERFACE SELECT IFACE BUTTONS
+            case "InterfaceSelect_BtnBack":
+                self.main_content_switcher.current = "PageMain"
 
 
     # def action_toggle_dark(self) -> None:
@@ -156,11 +190,3 @@ class TUIMain(App):
         # config["dark"] = self.dark
         # config_write()
         ...
-
-
-def main():
-    with TUIMain() as app:
-        app.run()
-
-if __name__ == "__main__":
-    main()
