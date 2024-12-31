@@ -154,7 +154,7 @@ class ControlPanel(Grid):
         self.btn_select = Button(
                 label="SELECT",
                 classes="WidgetTarget BtnsControl",
-                disabled=False,
+                disabled=True,
                 )
         self.btn_specs = Button(
                 label="SPECS",

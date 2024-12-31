@@ -108,19 +108,21 @@ class ControlPanel(Vertical):
 
         self.btn_select = Button(
                 label="SELECT",
+                id="WidgetInterface_BtnSelect",
                 classes="WidgetInterface BtnSelect",
                 disabled=False,
                 )
         self.btn_settings = Button(
                 label="SETTINGS",
+                id="WidgetInterface_BtnSettings",
                 classes="WidgetInterface BtnSettings",
                 disabled=True,
                 )
 
         yield self.btn_select
         yield self.btn_settings
-            
-    
+
+
 class WidgetInterface(Container):
     """
     Contains params such as:

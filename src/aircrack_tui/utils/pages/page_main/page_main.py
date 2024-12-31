@@ -14,6 +14,9 @@ from textual.containers import (
         Container,
         )
 from textual.widget     import Widget
+from textual.widgets    import (
+        Button, ContentSwitcher,
+        )
 
 # ------------- #
 # Local imports #
@@ -87,3 +90,5 @@ class PageMain(Widget):
         """
 
         self.remove_class("-hidden")
+
+
