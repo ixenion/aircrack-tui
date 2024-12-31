@@ -211,8 +211,33 @@ class PageInterfaceSelect(ScrollableContainer):
                 classes="InterfaceSelect BtnUpdateIfaces",
                 )
 
-        self.interface_card = InterfaceCard(
+        self.interface_card_1 = InterfaceCard(
+                iface_name="wlan0",
+                iface_mac="28:1F:35:4D:56:88",
+                iface_standart="802.11",
+                )
+        self.interface_card_2 = InterfaceCard(
                 iface_name="wlan1",
+                iface_mac="28:1F:35:4D:56:88",
+                iface_standart="802.11",
+                )
+        self.interface_card_3 = InterfaceCard(
+                iface_name="wlan2",
+                iface_mac="28:1F:35:4D:56:88",
+                iface_standart="802.11",
+                )
+        self.interface_card_4 = InterfaceCard(
+                iface_name="wlan3",
+                iface_mac="28:1F:35:4D:56:88",
+                iface_standart="802.11",
+                )
+        self.interface_card_5 = InterfaceCard(
+                iface_name="wlan4",
+                iface_mac="28:1F:35:4D:56:88",
+                iface_standart="802.11",
+                )
+        self.interface_card_6 = InterfaceCard(
+                iface_name="wlan5",
                 iface_mac="28:1F:35:4D:56:88",
                 iface_standart="802.11",
                 )
@@ -222,7 +247,12 @@ class PageInterfaceSelect(ScrollableContainer):
                 ):
             yield self.btn_back
             yield self.btn_update_ifaces
-        yield self.interface_card
+        yield self.interface_card_1
+        yield self.interface_card_2
+        yield self.interface_card_3
+        yield self.interface_card_4
+        yield self.interface_card_5
+        yield self.interface_card_6
 
 
     def on_mount(self) -> None:
