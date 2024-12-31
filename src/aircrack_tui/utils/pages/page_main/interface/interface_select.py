@@ -120,7 +120,9 @@ class CardControlPanel(Vertical):
         id here is just iface name, nothing else.
         """
 
-        super().__init__(classes=classes, id=id)
+        super().__init__(classes=classes)
+
+        self.btn_set_id = id
 
 
     def compose(self) -> ComposeResult:
@@ -128,6 +130,7 @@ class CardControlPanel(Vertical):
 
         self.btn_set_unset = Button(
                 label="SET",
+                id=self.btn_set_id,
                 classes="InterfaceSelect BtnSetUnset",
                 disabled=False,
                 )
@@ -248,9 +251,20 @@ class PageInterfaceSelect(ScrollableContainer):
                 # Card set button has iface name as ID, extract it
                 iface_name = str(event.button.id)
                 #TODO: Set iface card as current:
+                ...
+                self.notify(
+                        title="Interface",
+                        message=f"You'v set {iface_name}",
+                        )
 
             elif str(event.button.label) == "UNSET":
                 # Unselected card
                 event.button.label = "SET"
                 event.button.remove_class("-selected")
                 #TODO: Clear current card selected:
+                ...
+                self.notify(
+                        title="Interface",
+                        message=f"You'v unset {event.button.id}",
+                        severity="warning",
+                        )
