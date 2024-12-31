@@ -5,7 +5,7 @@ $color_3: $secondary;
 $error_1: crimson 100%;
 
 
-/* WIDGET TARGET */
+/* INTERFACE SELECT */
 ScrollableContainer.InterfaceSelect.Box {
     border: panel $color_1;
     border-title-align: center;
@@ -61,6 +61,7 @@ ScrollableContainer.InterfaceSelect.Box {
         grid-size: 2 1;
         content-align: center middle;
         height: 9;
+        grid-columns: 2fr 1fr;
 
         /* PARAMETERS LIST */
         Vertical.InterfaceSelect.ParametersList {
@@ -97,12 +98,14 @@ ScrollableContainer.InterfaceSelect.Box {
         /* CARD CONTROL PANEL */
         Vertical.InterfaceSelect.CardControlPanel {
             align: center middle;
+            width: 100%;
 
             /* CARD BUTTON SET/UNSET */
             .InterfaceSelect.BtnSetUnset {
                 margin: 0 1 0 1;
                 height: 3;
-                width: 14;
+                width: 11;
+                min-width: 11;
                 background: $success;
                 color: $background;
                 border: blank $success;
