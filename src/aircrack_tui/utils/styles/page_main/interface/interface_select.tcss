@@ -12,6 +12,13 @@ ScrollableContainer.InterfaceSelect.Box {
     display: block;
     margin: 0 0 0 0;
     height: 100%;
+    scrollbar-size: 0 2;
+    scrollbar-color: $color_1;
+    scrollbar-color-active: $color_1 80%;
+    scrollbar-color-hover: $color_1 80%;
+    scrollbar-background: $background;
+    scrollbar-background-hover: $background;
+    scrollbar-background-active: $background;
 
     /* NAVIGATION BUTTONS */
     Horizontal.InterfaceSelect.ControlPanel {
