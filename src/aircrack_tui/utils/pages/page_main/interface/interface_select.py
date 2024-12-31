@@ -195,6 +195,7 @@ class PageInterfaceSelect(ScrollableContainer):
         super().__init__(classes=classes, id=id)
 
         self.border_title = "INTERFACE SELECT"
+        self.iface_selected:str|None = None
 
 
     def compose(self) -> ComposeResult:
@@ -275,11 +276,18 @@ class PageInterfaceSelect(ScrollableContainer):
         else:
             # It's iface set/unset pressed.
             if str(event.button.label) == "SET":
+                # Unselect previous iface card if was selected
+                if self.iface_selected is not None:
+                    iface_selected_button_old:Button = \
+                            self.query_one(f"#{self.iface_selected}")
+                    iface_selected_button_old.label = "SET"
+                    iface_selected_button_old.remove_class("-selected")
                 # Selected card
                 event.button.label = "UNSET"
                 event.button.add_class("-selected")
                 # Card set button has iface name as ID, extract it
                 iface_name = str(event.button.id)
+                self.iface_selected = iface_name
                 #TODO: Set iface card as current:
                 ...
                 self.notify(
