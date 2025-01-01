@@ -25,6 +25,7 @@ class ShellCMD(ShellCMDBase):
     def __init__(self) -> None:
         ...
 
+
     async def util_presence_check(self, util_name:str) -> bool:
         """
         Return True if util_name present in the system,
@@ -38,3 +39,13 @@ class ShellCMD(ShellCMDBase):
         elif len(responce) == 0:
             return False
         return True
+
+
+    async def get_all_sys_ifaces_names(self) -> list[str]:
+        """
+        Returns a list of system interfaces like:
+        ['wlan0', 'wlan1', ...]
+        """
+
+        #TODO: create method.
+        ...
