@@ -20,6 +20,16 @@ from textual.widgets    import (
 # ------------- #
 # Local imports #
 
+from aircrack_tui.utils.api.models      import (
+        InterfaceParams,
+        )
+
+from aircrack_tui.utils.pages.page_main.widget_interface    import (
+        # ParametersList as InterfaceParametersList,
+        ParametersList as InterfaceParametersList,
+        WidgetInterface,
+        )
+
 
 
 ###########
@@ -112,7 +122,6 @@ class CardControlPanel(Vertical):
 
 
     def __init__(self,
-                 id:str,
                  classes:str="InterfaceSelect CardControlPanel",
                  ) -> None:
         """
@@ -122,15 +131,12 @@ class CardControlPanel(Vertical):
 
         super().__init__(classes=classes)
 
-        self.btn_set_id = id
-
 
     def compose(self) -> ComposeResult:
         """ Here components are combined."""
 
         self.btn_set_unset = Button(
                 label="SET",
-                id=self.btn_set_id,
                 classes="InterfaceSelect BtnSetUnset",
                 disabled=False,
                 )
@@ -146,17 +152,22 @@ class InterfaceCard(Grid):
 
     def __init__(self,
                  iface_name:str,
-                 iface_mac:str|None,
-                 iface_standart:str|None,
+                 iface_mac:str|None = None,
+                 iface_standart:str|None = None,
+                 iface_mode:str|None = None,
+                 iface_channel:str|None = None,
                  classes:str="InterfaceSelect InterfaceCard",
                  ) -> None:
         """ Set 'classes' attribute to the widget."""
 
-        super().__init__(classes=classes)
+        id=f"InterfaceSelect_InterfaceCard_{iface_name}"
+        super().__init__(classes=classes, id=id)
         
         self.iface_name = iface_name
         self.iface_mac = iface_mac
         self.iface_standart = iface_standart
+        self.iface_mode = iface_mode
+        self.iface_channel = iface_channel
 
 
     def compose(self) -> ComposeResult:
@@ -168,7 +179,6 @@ class InterfaceCard(Grid):
                 iface_standart=self.iface_standart,
                 )
         self.control_panel:CardControlPanel = CardControlPanel(
-                id=f"{self.iface_name}",
                 )
 
         yield self.parameters_list
@@ -195,7 +205,6 @@ class PageInterfaceSelect(ScrollableContainer):
         super().__init__(classes=classes, id=id)
 
         self.border_title = "INTERFACE SELECT"
-        self.iface_selected:str|None = None
 
 
     def compose(self) -> ComposeResult:
@@ -275,34 +284,64 @@ class PageInterfaceSelect(ScrollableContainer):
 
         else:
             # It's iface set/unset pressed.
-            if str(event.button.label) == "SET":
-                # Unselect previous iface card if was selected
-                if self.iface_selected is not None:
-                    iface_selected_button_old:Button = \
-                            self.query_one(f"#{self.iface_selected}")
+            button = event.button
+            card_selected:InterfaceCard = button.parent.parent
+            iface_main:InterfaceParametersList = \
+                    self.app.query_one(
+                            "#WidgetInterface_ParametersList")
+
+            # Here user wants to set new card:
+            if str(button.label) == "SET":
+                if iface_main.iface_params.iface_name is not None:
+                    # If we here that means there was some interface
+                    # selected before. So before selecting new one,
+                    # need to clear (unset) old button.
+                    
+                    iface_selected_button_old:Button = self.query_one(
+                            f".InterfaceSelect.BtnSetUnset.-selected")
                     iface_selected_button_old.label = "SET"
                     iface_selected_button_old.remove_class("-selected")
+                
                 # Selected card
-                event.button.label = "UNSET"
-                event.button.add_class("-selected")
+                button.label = "UNSET"
+                button.add_class("-selected")
                 # Card set button has iface name as ID, extract it
-                iface_name = str(event.button.id)
-                self.iface_selected = iface_name
-                #TODO: Set iface card as current:
-                ...
+                iface_name = card_selected.iface_name
+                iface_mac = card_selected.iface_mac
+                iface_mode = card_selected.iface_mode
+                iface_standart = card_selected.iface_standart
+                iface_channel = card_selected.iface_channel
+
+                # Set iface card as current:
+                iface_main.iface_params = InterfaceParams(
+                        iface_name=iface_name,
+                        iface_mac=iface_mac,
+                        iface_mode=iface_mode,
+                        iface_standart=iface_standart,
+                        iface_channel=iface_channel,
+                        )
+                
                 self.notify(
                         title="Interface",
                         message=f"You'v set {iface_name}",
                         )
 
-            elif str(event.button.label) == "UNSET":
+            # Here user wants to unset card:
+            elif str(button.label) == "UNSET":
                 # Unselected card
-                event.button.label = "SET"
-                event.button.remove_class("-selected")
-                #TODO: Clear current card selected:
-                ...
+                button.label = "SET"
+                button.remove_class("-selected")
+                # Clear current card selected:
+                iface_main.iface_params = InterfaceParams(
+                        iface_name=None,
+                        iface_mac=None,
+                        iface_mode=None,
+                        iface_standart=None,
+                        iface_channel=None,
+                        )
+
                 self.notify(
                         title="Interface",
-                        message=f"You'v unset {event.button.id}",
+                        message=f"You'v unset {card_selected.iface_name}",
                         severity="warning",
                         )

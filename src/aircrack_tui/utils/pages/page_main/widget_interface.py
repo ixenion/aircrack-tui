@@ -8,10 +8,12 @@ import asyncio
 # Third-party imports #
 
 from textual.app        import ComposeResult
+from textual.color import Color
 from textual.containers import (
         Container, Vertical,
-        Horizontal,
+        Horizontal, Grid,
         )
+from textual.reactive           import reactive
 from textual.widgets    import (
         Label,
         Button,
@@ -19,6 +21,11 @@ from textual.widgets    import (
 
 # ------------- #
 # Local imports #
+
+from aircrack_tui.utils.api.models  import (
+        InterfaceParams,
+        interface_params_main,
+        )
 
 
 
@@ -52,7 +59,7 @@ class Parameter(Horizontal):
                 )
 
         self.parameter_value = Label(
-                renderable="None",
+                renderable="",
                 classes="WidgetInterface ParameterValue",
                 disabled=True,
                 )
@@ -66,12 +73,22 @@ class ParametersList(Vertical):
     Contains All parameters list with corresponding values.
     """
 
+    # Reactive Interface parameters:
+    iface_params:reactive[InterfaceParams] = \
+            reactive(InterfaceParams(), layout=True)
+
+    
     def __init__(self,
+                 id:str="WidgetInterface_ParametersList",
                  classes:str="WidgetInterface ParametersList",
                  ) -> None:
         """ Set 'classes' attribute to the widget."""
 
-        super().__init__(classes=classes)
+        super().__init__(classes=classes, id=id)
+
+        self.color_text     = Color(255, 205, 77)
+        self.color_success  = Color(78, 191, 113)
+        self.color_error    = Color(208, 80, 109)
 
 
     def compose(self) -> ComposeResult:
@@ -82,10 +99,48 @@ class ParametersList(Vertical):
         self.iface_channel  = Parameter(parameter_name="Channel:")
         self.iface_mac      = Parameter(parameter_name="MAC:")
 
+        self.parameters:list[Parameter] = [
+                self.iface_name,
+                self.iface_mode,
+                self.iface_channel,
+                self.iface_mac,
+                ]
+
         yield self.iface_name
         yield self.iface_mode
         yield self.iface_channel
         yield self.iface_mac
+
+
+    def watch_iface_params(self,
+            old:InterfaceParams,
+            new:InterfaceParams,
+            ) -> None:
+        """
+        Update labels of selected interface.
+        """
+
+        iface_name = new.iface_name
+        iface_mac = new.iface_mac
+        iface_mode = new.iface_mode
+        # iface_standart = new.iface_standart
+        iface_channel = new.iface_channel
+
+        self.iface_name.parameter_value.update(str(iface_name))
+        self.iface_mode.parameter_value.update(str(iface_mode))
+        self.iface_channel.parameter_value.update(str(iface_channel))
+        self.iface_mac.parameter_value.update(str(iface_mac))
+        
+        # Update parameter value color: if not None - yellow, else - red.
+        for parameter in self.parameters:
+            if parameter.parameter_value.renderable == "None":
+                parameter.parameter_value.add_class("-is_empty")
+            elif parameter.parameter_value.renderable != "None":
+                parameter.parameter_value.remove_class("-is_empty")
+
+        # Update global 'interface_params_main' to make shure
+        # other widgets could get actual info.
+        interface_params_main = new
 
 
 class ControlPanel(Vertical):
@@ -152,7 +207,7 @@ class WidgetInterface(Container):
         self.parameters_list:ParametersList = ParametersList()
         self.control_panel:ControlPanel = ControlPanel()
 
-        with Horizontal(
+        with Grid(
                 classes="WidgetInterface Layout",
                 ):
             yield self.parameters_list

@@ -1,7 +1,7 @@
 # -------------- #
 # System imports #
 
-from collections    import namedtuple
+from dataclasses import dataclass
 
 
 # ------------------- #
@@ -18,7 +18,13 @@ from collections    import namedtuple
 #  MAIN  #
 ##########
 
+@dataclass
+class InterfaceParams:
+    """Represents interface details."""
+    iface_name: str | None = None
+    iface_mac: str | None = None
+    iface_standart: str | None = None
+    iface_mode: str | None = None
+    iface_channel: str | None = None
 
-InterfaceShort = namedtuple("InterfaceShort", "name standart MAC")
-#TODO: create InterfaceFull
-InterfaceFull = namedtuple("InterfaceFull", "name standart MAC")
+interface_params_main = InterfaceParams()

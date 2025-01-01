@@ -167,11 +167,7 @@ class WidgetMenu(Container):
         Handle button pressed.
         """
 
-        # WidgetMenu -> PageMain -> \
-        # ContentSwitcher_Primary -> Screen -> TUIMain
-        the_app:App = self.parent.parent.parent.parent.parent
-        
         match event.button.id:
 
             case "WidgetMenu_Btn_Exit":
-                the_app.exit(str(event.button))
+                self.app.exit(str(event.button))

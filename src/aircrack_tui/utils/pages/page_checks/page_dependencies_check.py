@@ -177,18 +177,14 @@ class PageDependenciesCheckContainer(Container):
         """
         Handle button pressed.
         """
-
-        # PageDependencyCheckContainer -> PageDependencyCheck -> \
-        # ContentSwitcher_Primary -> Screen -> TUIMain
-        the_app:App = self.parent.parent.parent.parent
         
         match event.button.id:
 
             case "PageDependenciesCheck_Btn_Exit":
-                the_app.exit(str(event.button))
+                self.app.exit(str(event.button))
 
             case "PageDependenciesCheck_Btn_Continue":
-                content_switcher:ContentSwitcher = the_app.query_one("#ContentSwitcher_Primary")
+                content_switcher:ContentSwitcher = self.app.query_one("#ContentSwitcher_Primary")
                 if content_switcher.current == "PageDependenciesCheck":
                     content_switcher.current = "PageMain"
 

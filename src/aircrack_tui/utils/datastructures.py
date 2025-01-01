@@ -12,6 +12,7 @@ from pathlib        import Path
 # Third-party imports #
 
 # import toml
+from textual.reactive                   import reactive
 
 
 # ------------- #
@@ -24,6 +25,10 @@ from aircrack_tui.utils.api             import (
 from aircrack_tui.utils.simple_tasks    import (
         get_system,
         )
+
+# from aircrack_tui.utils.api.models      import (
+#         InterfaceFull,
+#         )
 
 
 
@@ -57,6 +62,14 @@ DEPENDENCIES:list[str] = [
         ]
 
 shell_cmd = ShellCMD()
+
+# Interface, selected to conduct vulnurability testing
+
+# InterfaceFull.iface_name = None
+        # iface_mac=None,
+        # iface_standart=None,
+        # iface_mode=None,
+        # iface_channel=None,
 
 
 ########

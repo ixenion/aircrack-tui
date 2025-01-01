@@ -281,15 +281,11 @@ class PageSizeCheckContainer(Container):
         Handle button pressed which (buttons) are defined
         inside that class.
         """
-
-        # PageSizeCheckContainer -> PageSizeCheck -> \
-        # ContentSwitcher_Primary -> Screen -> TUIMain
-        the_app:App = self.parent.parent.parent.parent
         
         match event.button.id:
 
             case "PageSizeCheck_Btn_Exit":
-                the_app.exit(str(event.button))
+                self.app.exit(str(event.button))
 
             case "PageSizeCheck_Btn_TermAutosize":
                 self.autosize_pressed = True
@@ -297,7 +293,7 @@ class PageSizeCheckContainer(Container):
                 android_term_inc()
 
             case "PageSizeCheck_Btn_Continue":
-                content_switcher:ContentSwitcher = the_app.query_one("#ContentSwitcher_Primary")
+                content_switcher:ContentSwitcher = self.app.query_one("#ContentSwitcher_Primary")
                 if content_switcher.current == "PageSizeCheck":
                     content_switcher.current = "PageDependenciesCheck"
 
