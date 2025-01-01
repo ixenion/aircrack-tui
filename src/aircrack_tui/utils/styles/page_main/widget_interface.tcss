@@ -12,6 +12,7 @@ Container.WidgetInterface.Box {
     margin: 1 2 0 2;
     height: 25%;
     min-height: 11;
+    min-width: 42;
 
     /* PARAMETERS AND CONTROL BUTTONS */
     Grid.WidgetInterface.Layout {

@@ -12,6 +12,8 @@ Container.WidgetMenu.Box {
     /* height: 50%; */
     width: 100%;
     align-horizontal: center;
+    min-width: 36;
+
 
     /* GRID LAYOUT */
     .WidgetMenu.CustomGridVertical {
