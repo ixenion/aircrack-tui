@@ -70,7 +70,7 @@ ScrollableContainer.InterfaceSelect.Box {
         border: round $color_2 30%;
         grid-size: 2 1;
         content-align: center middle;
-        height: 9;
+        height: 7;
         grid-columns: 2fr 1fr;
 
         /* PARAMETERS LIST */

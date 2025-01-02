@@ -85,7 +85,6 @@ class ParametersList(Vertical):
     def __init__(self,
                  iface_name:str,
                  iface_mac:str|None,
-                 iface_standart:str|None,
                  classes:str="InterfaceSelect ParametersList",
                  ) -> None:
         """ Set 'classes' attribute to the widget."""
@@ -94,7 +93,6 @@ class ParametersList(Vertical):
 
         self.iface_name_val     = iface_name
         self.iface_mac_val      = iface_mac
-        self.iface_standart_val = iface_standart
 
 
     def compose(self) -> ComposeResult:
@@ -104,10 +102,6 @@ class ParametersList(Vertical):
                 parameter_name="Name:",
                 parameter_value=self.iface_name_val,
                 )
-        self.iface_standart = Parameter(
-                parameter_name="Standart:",
-                parameter_value=self.iface_standart_val,
-                )
         self.iface_mac      = Parameter(
                 parameter_name="MAC:",
                 parameter_value=self.iface_mac_val,
@@ -115,7 +109,6 @@ class ParametersList(Vertical):
 
         yield self.iface_name
         yield self.iface_mac
-        yield self.iface_standart
 
 
 class CardControlPanel(Vertical):
@@ -157,7 +150,6 @@ class InterfaceCard(Grid):
     def __init__(self,
                  iface_name:str,
                  iface_mac:str|None = None,
-                 iface_standart:str|None = None,
                  iface_mode:str|None = None,
                  iface_channel:str|None = None,
                  classes:str="InterfaceSelect InterfaceCard",
@@ -169,7 +161,6 @@ class InterfaceCard(Grid):
         
         self.iface_name = iface_name
         self.iface_mac = iface_mac
-        self.iface_standart = iface_standart
         self.iface_mode = iface_mode
         self.iface_channel = iface_channel
 
@@ -180,7 +171,6 @@ class InterfaceCard(Grid):
         self.parameters_list:ParametersList = ParametersList(
                 iface_name=self.iface_name,
                 iface_mac=self.iface_mac,
-                iface_standart=self.iface_standart,
                 )
         self.control_panel:CardControlPanel = CardControlPanel(
                 )
@@ -267,12 +257,10 @@ class PageInterfaceSelect(ScrollableContainer):
                     iface_mac = await shell_cmd.get_iface_mac(iface_name)
                     iface_channel = await shell_cmd.get_iface_channel(iface_name)
                     iface_mode = await shell_cmd.get_iface_mode(iface_name)
-                    iface_standart = await shell_cmd.get_iface_standart(iface_name)
                     # Display InterfaceCards
                     interface_card_widget = InterfaceCard(
                             iface_name=iface_name,
                             iface_mac=iface_mac,
-                            iface_standart=iface_standart,
                             iface_mode=iface_mode,
                             iface_channel=iface_channel,
                             )

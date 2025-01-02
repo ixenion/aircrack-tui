@@ -119,24 +119,3 @@ class ShellCMD(ShellCMDBase):
 
         mode = response.split("type")[-1].strip()
         return mode
-
-
-    async def get_iface_standart(self, iface_name:str) -> str|None:
-        """
-        Return iface standart.
-        """
-
-        cmd = f"sudo iwconfig | grep {iface_name}"
-        success, response = await self.cmd_query_finite(cmd)
-        # If success - got response something like:
-        # "wlan1    IEEE 802.11  ESSID:off/any"
-        if not success:
-            return None
-        elif len(response) == 0:
-            return None
-
-        # Split by "ESSID" and strip spaces
-        before_essid = response.split('ESSID')[0].strip()
-        # Remove the interface name from the beginning
-        standart = before_essid.replace(iface_name, '').strip()
-        return standart
