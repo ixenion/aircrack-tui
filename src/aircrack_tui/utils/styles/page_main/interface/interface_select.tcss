@@ -57,6 +57,9 @@ ScrollableContainer.InterfaceSelect.Box {
             &:disabled {
                 background: $color_2 50%;
             }
+            LoadingIndicator {
+                color: $background;
+            }
         }
     }
 

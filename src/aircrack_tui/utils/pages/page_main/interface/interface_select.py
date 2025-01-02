@@ -283,6 +283,9 @@ class PageInterfaceSelect(ScrollableContainer):
         """
 
         if event.button.id == "InterfaceSelect_BtnUpdateIfaces":
+            # Set button is loading
+            event.button.loading = True
+
             # Update ifaces list
             success:bool
             response:list[str]|str
@@ -311,8 +314,12 @@ class PageInterfaceSelect(ScrollableContainer):
                     interfaces.append(interface)
 
                 self.notify(title="Interface", message=f"{interfaces[0]}")
-                #TODO: create InterfaceCards
+                #TODO: display InterfaceCards
                 ...
+
+
+            # Unset button is loading
+            event.button.loading = False
 
 
         else:
