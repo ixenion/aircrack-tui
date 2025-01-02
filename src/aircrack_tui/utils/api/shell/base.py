@@ -37,9 +37,24 @@ class ShellCMDBase:
                 stderr=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
                 )
-        stdout, stderr = [ val.decode("utf-8") for val in await proc.communicate() ]
-    
-        if not stderr:
-            return True, stdout
+        stdout, stderr = await proc.communicate()
+        
+        # Decode the outputs
+        stdout_decoded = stdout.decode("utf-8")
+        stderr_decoded = stderr.decode("utf-8")
+
+        # Check if the command executed successfully
+        success = proc.returncode == 0
+        if success:
+            if stdout_decoded:
+                return True, stdout_decoded
+            elif stderr_decoded:
+                # For some reasons there may be commands
+                # That run successfully and return meaningfull output,
+                # but their output is inside stderr :(
+                # Like "sudo iwconfig"
+                return True, stderr_decoded
         else:
-            return False, stderr
+            # Log both stdout and stderr for debugging
+            error_message = stderr_decoded if stderr_decoded else stdout_decoded
+            return False, error_message
