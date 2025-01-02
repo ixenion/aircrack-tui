@@ -283,16 +283,37 @@ class PageInterfaceSelect(ScrollableContainer):
         """
 
         if event.button.id == "InterfaceSelect_BtnUpdateIfaces":
-            #TODO: Update ifaces list
+            # Update ifaces list
             success:bool
             response:list[str]|str
             success, response = await shell_cmd.get_all_sys_ifaces_names()
             if not success:
                 self.notify(title="Interface", message="Could not gather sys ifaces. Check logs.", severity="error")
             elif success:
+                # If we here that means we have at least one interface
+
                 # self.notify(title="Interface", message=f"{response}")
                 #TODO: Create ifaces' cards and display them
+                
+                interfaces:list[InterfaceParams] = []
+                for iface_name in response:
+                    iface_mac = await shell_cmd.get_iface_mac(iface_name)
+                    iface_channel = await shell_cmd.get_iface_channel(iface_name)
+                    iface_mode = await shell_cmd.get_iface_mode(iface_name)
+                    iface_standart = await shell_cmd.get_iface_standart(iface_name)
+                    interface = InterfaceParams(
+                            iface_name=iface_name,
+                            iface_mac=iface_mac,
+                            iface_standart=iface_standart,
+                            iface_mode=iface_mode,
+                            iface_channel=iface_channel,
+                            )
+                    interfaces.append(interface)
+
+                self.notify(title="Interface", message=f"{interfaces[0]}")
+                #TODO: create InterfaceCards
                 ...
+
 
         else:
             # It's iface set/unset pressed.

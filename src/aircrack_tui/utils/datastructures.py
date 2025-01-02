@@ -55,6 +55,7 @@ DEPENDENCIES:list[str] = [
         "aircrack-ng",
         "crunch",
         "iwlist",
+        "iw",
         ]
 
 shell_cmd = ShellCMD()

@@ -2,6 +2,7 @@
 # System imports #
 
 import asyncio
+import re
 
 
 # ------------------- #
@@ -59,3 +60,80 @@ class ShellCMD(ShellCMDBase):
         interfaces = [line.split()[0] for line in response.strip().split('\n') if line and not line.startswith(' ')]
         
         return True, interfaces
+
+
+    async def get_iface_mac(self, iface_name:str) -> str|None:
+        """
+        Return iface MAC.
+        """
+
+        cmd = f"sudo iw dev {iface_name} info | grep addr"
+        success, response = await self.cmd_query_finite(cmd)
+        # If success - got response something like:
+        # "    addr fa:be:12:34:56:78"
+        if not success:
+            return None
+        elif len(response) == 0:
+            return None
+
+        mac = response.split("arrd")[-1].strip()
+        return mac
+
+
+    async def get_iface_channel(self, iface_name:str) -> str|None:
+        """
+        Return iface channel.
+        """
+
+        cmd = f"sudo iwlist {iface_name} channel | grep Current"
+        success, response = await self.cmd_query_finite(cmd)
+        # If success - got response something like:
+        # "    Current Frequency=2.442 GHz (Channel 7)"
+        if not success:
+            return None
+        elif len(response) == 0:
+            return None
+
+        # Regular expression to extract a channel number
+        match = re.search(r"\(Channel (\d+)\)", response)
+        if match:
+            channel_number = match.group(1)
+            return channel_number
+        else:
+            return None
+
+
+    async def get_iface_mode(self, iface_name:str) -> str|None:
+        """
+        Return iface mode.
+        """
+
+        cmd = f"sudo iw dev {iface_name} info | grep type"
+        success, response = await self.cmd_query_finite(cmd)
+        # If success - got response something like:
+        # "    type managed"
+        if not success:
+            return None
+        elif len(response) == 0:
+            return None
+
+        mode = response.split("type")[-1].strip()
+        return mode
+
+
+    async def get_iface_standart(self, iface_name:str) -> str|None:
+        """
+        Return iface standart.
+        """
+
+        cmd = f"sudo iwconfig | grep {iface_name}"
+        success, response = await self.cmd_query_finite(cmd)
+        # If success - got response something like:
+        # "wlan1    IEEE 802.11  ESSID:off/any"
+        if not success:
+            return None
+        elif len(response) == 0:
+            return None
+
+        standart = response.split("\t")[1]
+        return standart
