@@ -24,6 +24,10 @@ from aircrack_tui.utils.api.models      import (
         InterfaceParams,
         )
 
+from aircrack_tui.utils.datastructures  import (
+        shell_cmd,
+        )
+
 from aircrack_tui.utils.pages.page_main.widget_interface    import (
         # ParametersList as InterfaceParametersList,
         ParametersList as InterfaceParametersList,
@@ -280,7 +284,15 @@ class PageInterfaceSelect(ScrollableContainer):
 
         if event.button.id == "InterfaceSelect_BtnUpdateIfaces":
             #TODO: Update ifaces list
-            ...
+            success:bool
+            response:list[str]|str
+            success, response = await shell_cmd.get_all_sys_ifaces_names()
+            if not success:
+                self.notify(title="Interface", message="Could not gather sys ifaces. Check logs.", severity="error")
+            elif success:
+                # self.notify(title="Interface", message=f"{response}")
+                #TODO: Create ifaces' cards and display them
+                ...
 
         else:
             # It's iface set/unset pressed.

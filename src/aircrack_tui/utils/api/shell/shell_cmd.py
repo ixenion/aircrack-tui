@@ -33,19 +33,29 @@ class ShellCMD(ShellCMDBase):
         """
         
         cmd = f"command -v {util_name}"
-        success, responce = await self.cmd_query_finite(cmd)
+        success, response = await self.cmd_query_finite(cmd)
         if not success:
             return False
-        elif len(responce) == 0:
+        elif len(response) == 0:
             return False
         return True
 
 
-    async def get_all_sys_ifaces_names(self) -> list[str]:
+    async def get_all_sys_ifaces_names(self) -> tuple[bool, list[str]|str]:
         """
         Returns a list of system interfaces like:
         ['wlan0', 'wlan1', ...]
+        return values are: tuple[success:bool, interfaces:list[str]]
         """
 
-        #TODO: create method.
-        ...
+        cmd = f"sudo iwconfig"
+        success, response = await self.cmd_query_finite(cmd)
+        if not success:
+            return False, response
+        elif len(response) == 0:
+            return False, []
+
+        # Split the data (response) into lines and extract interface names
+        interfaces = [line.split()[0] for line in response.strip().split('\n') if line and not line.startswith(' ')]
+        
+        return True, interfaces
