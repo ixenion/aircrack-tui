@@ -12,6 +12,7 @@ from textual.containers import (
         Container, Vertical, Grid,
         Horizontal, ScrollableContainer,
         )
+from textual.css.query  import NoMatches
 from textual.widgets    import (
         Label,
         Button,
@@ -119,6 +120,7 @@ class CardControlPanel(Vertical):
 
 
     def __init__(self,
+                 selected:bool=False,
                  classes:str="InterfaceSelect CardControlPanel",
                  ) -> None:
         """
@@ -127,6 +129,8 @@ class CardControlPanel(Vertical):
         """
 
         super().__init__(classes=classes)
+
+        self.selected = selected
 
 
     def compose(self) -> ComposeResult:
@@ -141,6 +145,15 @@ class CardControlPanel(Vertical):
         yield self.btn_set_unset
 
 
+    def on_mount(self) -> None:
+        """
+        """
+
+        if self.selected:
+            self.btn_set_unset.label = "UNSET"
+            self.btn_set_unset.add_class("-selected")
+
+
 class InterfaceCard(Grid):
     """
     Contains single iface short info and button to set/unset.
@@ -152,6 +165,7 @@ class InterfaceCard(Grid):
                  iface_mac:str|None = None,
                  iface_mode:str|None = None,
                  iface_channel:str|None = None,
+                 selected:bool=False,
                  classes:str="InterfaceSelect InterfaceCard",
                  ) -> None:
         """ Set 'classes' attribute to the widget."""
@@ -163,6 +177,7 @@ class InterfaceCard(Grid):
         self.iface_mac = iface_mac
         self.iface_mode = iface_mode
         self.iface_channel = iface_channel
+        self.selected = selected
 
 
     def compose(self) -> ComposeResult:
@@ -173,6 +188,7 @@ class InterfaceCard(Grid):
                 iface_mac=self.iface_mac,
                 )
         self.control_panel:CardControlPanel = CardControlPanel(
+                selected=self.selected,
                 )
 
         yield self.parameters_list
@@ -241,6 +257,18 @@ class PageInterfaceSelect(ScrollableContainer):
         if event.button.id == "InterfaceSelect_BtnUpdateIfaces":
             # Set button is loading
             event.button.loading = True
+            # Save previously selected interface as main (working)
+            try:
+                iface_selected_button:Button = self.query_one(
+                        f".InterfaceSelect.BtnSetUnset.-selected")
+                old_card_iface_name_used:str = \
+                        iface_selected_button.parent.parent.iface_name
+            except NoMatches as e:
+                # That exception means no iface was selected to be saved.
+                # It can be on app startup, when updating first time.
+                old_card_iface_name_used:None = None
+                pass
+
             # Delete all Interface Cards before updating them:
             for interface_card_old in self.interfaces_cards:
                 interface_card_old.remove()
@@ -259,6 +287,7 @@ class PageInterfaceSelect(ScrollableContainer):
                 # Sort interfaces in alphabetic order:
                 response.sort()
 
+                # Create new interfaces' cards:
                 for iface_name in response:
                     iface_mac = await shell_cmd.get_iface_mac(iface_name)
                     iface_channel = await shell_cmd.get_iface_channel(iface_name)
@@ -269,10 +298,10 @@ class PageInterfaceSelect(ScrollableContainer):
                             iface_mac=iface_mac,
                             iface_mode=iface_mode,
                             iface_channel=iface_channel,
+                            selected=iface_name == old_card_iface_name_used,
                             )
                     self.mount(interface_card_widget)
                     self.interfaces_cards.append(interface_card_widget)
-
 
             # Unset button is loading
             event.button.loading = False
