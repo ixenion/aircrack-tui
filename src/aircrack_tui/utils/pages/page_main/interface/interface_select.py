@@ -320,11 +320,12 @@ class PageInterfaceSelect(ScrollableContainer):
                         iface_channel=None,
                         )
 
-                self.notify(
-                        title="Interface",
-                        message=f"No card selected.",
-                        severity="warning",
-                        )
+                if old_card_iface_name_used is not None:
+                    self.notify(
+                            title="Interface",
+                            message=f"No card selected.",
+                            severity="warning",
+                            )
                 
 
             # Unset button is loading
