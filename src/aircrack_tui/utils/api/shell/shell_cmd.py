@@ -108,7 +108,7 @@ class ShellCMD(ShellCMDBase):
         Return iface mode.
         """
 
-        cmd = f"sudo iw dev {iface_name} info | grep type"
+        cmd = f"sudo iwconfig {iface_name} | grep Mode"
         success, response = await self.cmd_query_finite(cmd)
         # If success - got response something like:
         # "    type managed"
@@ -117,5 +117,8 @@ class ShellCMD(ShellCMDBase):
         elif len(response) == 0:
             return None
 
-        mode = response.split("type")[-1].strip()
+        try:
+            mode = response.split("Mode:")[1].split(" ")[0]
+        except Exception as e:
+            mode = None
         return mode
