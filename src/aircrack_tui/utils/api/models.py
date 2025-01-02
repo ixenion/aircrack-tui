@@ -23,7 +23,6 @@ class InterfaceParams:
     """Represents interface details."""
     iface_name: str | None = None
     iface_mac: str | None = None
-    iface_standart: str | None = None
     iface_mode: str | None = None
     iface_channel: str | None = None
 

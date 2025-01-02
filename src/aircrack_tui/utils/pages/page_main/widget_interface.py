@@ -123,7 +123,6 @@ class ParametersList(Vertical):
         iface_name = new.iface_name
         iface_mac = new.iface_mac
         iface_mode = new.iface_mode
-        # iface_standart = new.iface_standart
         iface_channel = new.iface_channel
 
         self.iface_name.parameter_value.update(str(iface_name))

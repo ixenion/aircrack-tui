@@ -299,7 +299,6 @@ class PageInterfaceSelect(ScrollableContainer):
                 iface_name = card_selected.iface_name
                 iface_mac = card_selected.iface_mac
                 iface_mode = card_selected.iface_mode
-                iface_standart = card_selected.iface_standart
                 iface_channel = card_selected.iface_channel
 
                 # Set iface card as current:
@@ -307,7 +306,6 @@ class PageInterfaceSelect(ScrollableContainer):
                         iface_name=iface_name,
                         iface_mac=iface_mac,
                         iface_mode=iface_mode,
-                        iface_standart=iface_standart,
                         iface_channel=iface_channel,
                         )
                 
@@ -326,7 +324,6 @@ class PageInterfaceSelect(ScrollableContainer):
                         iface_name=None,
                         iface_mac=None,
                         iface_mode=None,
-                        iface_standart=None,
                         iface_channel=None,
                         )
 
