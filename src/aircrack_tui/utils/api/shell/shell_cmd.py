@@ -42,7 +42,7 @@ class ShellCMD(ShellCMDBase):
         return True
 
 
-    async def get_all_sys_ifaces_names(self) -> tuple[bool, list[str]|str]:
+    async def get_all_sys_ifaces_names(self) -> tuple[bool, list[str]]:
         """
         Returns a list of system interfaces like:
         ['wlan0', 'wlan1', ...]
@@ -52,7 +52,7 @@ class ShellCMD(ShellCMDBase):
         cmd = f"sudo iwconfig"
         success, response = await self.cmd_query_finite(cmd)
         if not success:
-            return False, response
+            return False, []
         elif len(response) == 0:
             return False, []
 

@@ -249,12 +249,16 @@ class PageInterfaceSelect(ScrollableContainer):
 
             # Update ifaces list
             success:bool
-            response:list[str]|str
+            response:list[str]
             success, response = await shell_cmd.get_all_sys_ifaces_names()
             if not success:
                 self.notify(title="Interface", message="Could not gather sys ifaces. Check logs.", severity="error")
             elif success:
                 # If we here that means we have at least one interface
+                
+                # Sort interfaces in alphabetic order:
+                response.sort()
+
                 for iface_name in response:
                     iface_mac = await shell_cmd.get_iface_mac(iface_name)
                     iface_channel = await shell_cmd.get_iface_channel(iface_name)
