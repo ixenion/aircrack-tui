@@ -209,6 +209,7 @@ class PageInterfaceSelect(ScrollableContainer):
         super().__init__(classes=classes, id=id)
 
         self.border_title = "INTERFACE SELECT"
+        self.interfaces_cards:list[InterfaceCard] = []
 
 
     def compose(self) -> ComposeResult:
@@ -225,48 +226,11 @@ class PageInterfaceSelect(ScrollableContainer):
                 classes="InterfaceSelect BtnUpdateIfaces",
                 )
 
-        self.interface_card_1 = InterfaceCard(
-                iface_name="wlan0",
-                iface_mac="28:1F:35:4D:56:88",
-                iface_standart="802.11",
-                )
-        self.interface_card_2 = InterfaceCard(
-                iface_name="wlan1",
-                iface_mac="28:1F:35:4D:56:88",
-                iface_standart="802.11",
-                )
-        self.interface_card_3 = InterfaceCard(
-                iface_name="wlan2",
-                iface_mac="28:1F:35:4D:56:88",
-                iface_standart="802.11",
-                )
-        self.interface_card_4 = InterfaceCard(
-                iface_name="wlan3",
-                iface_mac="28:1F:35:4D:56:88",
-                iface_standart="802.11",
-                )
-        self.interface_card_5 = InterfaceCard(
-                iface_name="wlan4",
-                iface_mac="28:1F:35:4D:56:88",
-                iface_standart="802.11",
-                )
-        self.interface_card_6 = InterfaceCard(
-                iface_name="wlan5",
-                iface_mac="28:1F:35:4D:56:88",
-                iface_standart="802.11",
-                )
-
         with Horizontal(
                 classes="InterfaceSelect ControlPanel",
                 ):
             yield self.btn_back
             yield self.btn_update_ifaces
-        yield self.interface_card_1
-        yield self.interface_card_2
-        yield self.interface_card_3
-        yield self.interface_card_4
-        yield self.interface_card_5
-        yield self.interface_card_6
 
 
     def on_mount(self) -> None:
@@ -285,6 +249,11 @@ class PageInterfaceSelect(ScrollableContainer):
         if event.button.id == "InterfaceSelect_BtnUpdateIfaces":
             # Set button is loading
             event.button.loading = True
+            # Delete all Interface Cards before updating them:
+            for interface_card_old in self.interfaces_cards:
+                interface_card_old.remove()
+            # Clear list of Current cards
+            self.interfaces_cards.clear()
 
             # Update ifaces list
             success:bool
@@ -294,28 +263,21 @@ class PageInterfaceSelect(ScrollableContainer):
                 self.notify(title="Interface", message="Could not gather sys ifaces. Check logs.", severity="error")
             elif success:
                 # If we here that means we have at least one interface
-
-                # self.notify(title="Interface", message=f"{response}")
-                #TODO: Create ifaces' cards and display them
-                
-                interfaces:list[InterfaceParams] = []
                 for iface_name in response:
                     iface_mac = await shell_cmd.get_iface_mac(iface_name)
                     iface_channel = await shell_cmd.get_iface_channel(iface_name)
                     iface_mode = await shell_cmd.get_iface_mode(iface_name)
                     iface_standart = await shell_cmd.get_iface_standart(iface_name)
-                    interface = InterfaceParams(
+                    # Display InterfaceCards
+                    interface_card_widget = InterfaceCard(
                             iface_name=iface_name,
                             iface_mac=iface_mac,
                             iface_standart=iface_standart,
                             iface_mode=iface_mode,
                             iface_channel=iface_channel,
                             )
-                    interfaces.append(interface)
-
-                self.notify(title="Interface", message=f"{interfaces[0]}")
-                #TODO: display InterfaceCards
-                ...
+                    self.mount(interface_card_widget)
+                    self.interfaces_cards.append(interface_card_widget)
 
 
             # Unset button is loading
