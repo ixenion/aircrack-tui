@@ -302,6 +302,30 @@ class PageInterfaceSelect(ScrollableContainer):
                             )
                     self.mount(interface_card_widget)
                     self.interfaces_cards.append(interface_card_widget)
+            
+            # Check if previously selected interface is in new list
+            # If no - unset main interface:
+            if old_card_iface_name_used in response:
+                # There is prev selected interface in new list,
+                # No need to do any additional staff here.
+                pass
+            elif old_card_iface_name_used not in response:
+                # Clear current card selected:
+                iface_main:InterfaceParametersList = self.app.query_one(
+                        "#WidgetInterface_ParametersList")
+                iface_main.iface_params = InterfaceParams(
+                        iface_name=None,
+                        iface_mac=None,
+                        iface_mode=None,
+                        iface_channel=None,
+                        )
+
+                self.notify(
+                        title="Interface",
+                        message=f"No card selected.",
+                        severity="warning",
+                        )
+                
 
             # Unset button is loading
             event.button.loading = False
@@ -311,9 +335,8 @@ class PageInterfaceSelect(ScrollableContainer):
             # It's iface set/unset pressed.
             button = event.button
             card_selected:InterfaceCard = button.parent.parent
-            iface_main:InterfaceParametersList = \
-                    self.app.query_one(
-                            "#WidgetInterface_ParametersList")
+            iface_main:InterfaceParametersList = self.app.query_one(
+                    "#WidgetInterface_ParametersList")
 
             # Here user wants to set new card:
             if str(button.label) == "SET":
