@@ -76,7 +76,7 @@ class ShellCMD(ShellCMDBase):
         elif len(response) == 0:
             return None
 
-        mac = response.split("arrd")[-1].strip()
+        mac = response.split("addr")[-1].strip()
         return mac
 
 
@@ -135,5 +135,8 @@ class ShellCMD(ShellCMDBase):
         elif len(response) == 0:
             return None
 
-        standart = response.split("\t")[1]
+        # Split by "ESSID" and strip spaces
+        before_essid = response.split('ESSID')[0].strip()
+        # Remove the interface name from the beginning
+        standart = before_essid.replace(iface_name, '').strip()
         return standart
