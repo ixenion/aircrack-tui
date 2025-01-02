@@ -229,6 +229,8 @@ class PageInterfaceSelect(ScrollableContainer):
         """
 
         self.remove_class("-hidden")
+        # Send btn press event on mount to gather interfaces ASAP
+        self.btn_update_ifaces.press()
 
 
     async def on_button_pressed(self, event:Button.Pressed) -> None:
