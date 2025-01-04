@@ -248,6 +248,19 @@ class PageInterfaceSelect(ScrollableContainer):
         # Send btn press event on mount to gather interfaces ASAP
         self.btn_update_ifaces.press()
 
+        # Set auto update interfaces' list:
+        self.set_interval(2, self.update_interfaces_list)
+
+
+    async def update_interfaces_list(self) -> None:
+        """
+        Endless background task to update interfaces.
+        """
+
+        while True:
+            await asyncio.sleep(2)
+            self.btn_update_ifaces.press()
+
 
     async def on_button_pressed(self, event:Button.Pressed) -> None:
         """
